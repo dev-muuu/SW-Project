@@ -1,18 +1,25 @@
 package com.example.sw_project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class PostingActivity extends MainActivity {
 
-    private  static final String TAG="Posting";
+    private  static final String TAG="WritePostActivity";
     private FirebaseUser user;
 
     @Override
@@ -56,7 +63,21 @@ public class PostingActivity extends MainActivity {
     }
     private void uploader(WriteInfo writeInfo){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(writeInfo);
+        db.collection("posts").add(writeInfo)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        startToast("게시글이 등록되었습니다.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                        startToast("게시글이 등록되지 않았습니다.");
+                    }
+                });
 
 
     }
