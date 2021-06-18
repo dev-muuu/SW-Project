@@ -56,7 +56,21 @@ public class PostingActivity extends MainActivity {
     }
     private void uploader(WriteInfo writeInfo){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(writeInfo);
+        db.collection("posts").add(writeInfo)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        startToast("게시글이 등록되었습니다.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                        startToast("게시글이 등록되지 않았습니다.");
+                    }
+                });
 
 
     }
