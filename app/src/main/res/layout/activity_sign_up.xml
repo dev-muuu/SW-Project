@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/signUpEditText"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="50dp"
         android:layout_weight="1"
         android:gravity="center"
         android:shadowColor="#000000"
@@ -17,47 +20,33 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="534dp"
+        android:layout_height="581dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/idText"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="아이디"
-            android:inputType="textPersonName" />
+            android:layout_height="43dp"
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/passwdText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:ems="10"
-            android:hint="비밀번호"
-            android:inputType="textPassword"
-            android:paddingBottom="10dp" />
+            <EditText
+                android:id="@+id/emailEditText"
+                android:layout_width="249dp"
+                android:layout_height="43dp"
+                android:layout_margin="5dp"
+                android:ems="10"
+                android:hint="학번@sungshin.ac.kr"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="10dp" />
 
-        <EditText
-            android:id="@+id/passwdCheckText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:ems="10"
-            android:hint="비밀번호 확인"
-            android:inputType="textPassword"
-            android:paddingBottom="10dp" />
-
-        <EditText
-            android:id="@+id/emailEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:ems="10"
-            android:hint="이메일"
-            android:inputType="textEmailAddress"
-            android:paddingBottom="10dp" />
+            <Button
+                android:id="@+id/emailButton"
+                android:layout_width="137dp"
+                android:layout_height="43dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="인증메일 전송" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/userNameText"
@@ -70,21 +59,82 @@
             android:inputType="textMultiLine"
             android:paddingBottom="10dp" />
 
-        <MultiAutoCompleteTextView
-            android:id="@+id/collegeSet"
+        <EditText
+            android:id="@+id/contestCountEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:hint="단과대"
+            android:ems="10"
+            android:hint="공모전 참여횟수"
+            android:inputType="number"
             android:paddingBottom="10dp" />
 
-        <MultiAutoCompleteTextView
-            android:id="@+id/departmentSet"
+        <EditText
+            android:id="@+id/idText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:hint="학과"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="아이디"
+            android:inputType="textPersonName"
             android:paddingBottom="10dp" />
+
+        <EditText
+            android:id="@+id/passwdText"
+            android:layout_width="401dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="비밀번호"
+            android:inputType="textPassword"
+            android:paddingBottom="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/passwdCheckText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:ems="10"
+                android:hint="비밀번호 확인"
+                android:inputType="textPassword"
+                android:paddingBottom="10dp" />
+
+            <EditText
+                android:id="@+id/correctEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:paddingBottom="10dp" />
+
+
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/collegeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="단과대"
+            android:paddingBottom="10dp"></Spinner>
+
+        <Spinner
+            android:id="@+id/majorSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="학과"
+            android:paddingBottom="10dp"></Spinner>
 
         <EditText
             android:id="@+id/studentIdSet"
@@ -94,16 +144,16 @@
             android:ems="10"
             android:gravity="start|top"
             android:hint="학번"
-            android:inputType="textMultiLine"
+            android:inputType="number"
             android:paddingBottom="10dp" />
 
         <Button
-            android:id="@+id/loginButton"
+            android:id="@+id/signUpButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:paddingBottom="10dp"
             android:text="회원가입" />
-    </LinearLayout>
 
+    </LinearLayout>
 </LinearLayout>

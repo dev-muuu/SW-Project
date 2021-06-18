@@ -1,12 +1,14 @@
 package com.example.sw_project;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.http.HttpResponseCache;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,13 +21,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "SignUpActivity";
 
+    private ArrayAdapter collegeadapter;
+    private Spinner collegespinner;
+
+    private ArrayAdapter majoradapter;
+    private Spinner majorspinner;
+
+    EditText passwordEditText, passwordCheckEditText, correctEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +43,42 @@ public class SignUpActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        findViewById(R.id.loginButton).setOnClickListener(onClickListener);
+        findViewById(R.id.signUpButton).setOnClickListener(onClickListener);
+
+        // 단과대 스크롤
+        collegespinner = (Spinner) findViewById(R.id.collegeSpinner);
+        collegeadapter = ArrayAdapter.createFromResource(this, R.array.college, android.R.layout.simple_spinner_dropdown_item);
+        collegespinner.setAdapter(collegeadapter);
+
+        // 학과 스크롤
+        majorspinner = (Spinner) findViewById(R.id.majorSpinner);
+        majoradapter = ArrayAdapter.createFromResource(this, R.array.major, android.R.layout.simple_spinner_dropdown_item);
+        majorspinner.setAdapter(majoradapter);
+
+        passwordEditText = (EditText)findViewById(R.id.passwdText);
+        passwordCheckEditText = (EditText)findViewById(R.id.passwdCheckText);
+        correctEditText = (EditText) findViewById(R.id.correctEditText);
+        passwordCheckEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (passwordEditText.getText().toString().equals(passwordCheckEditText.getText().toString())) {
+                    // correct
+                    correctEditText.setText("일치합니다.");
+                } else {
+                    // incorrect
+                    correctEditText.setText("일치하지 않습니다.");
+                }
+            }
+        });
 
     }
 
@@ -53,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.loginButton:
+                case R.id.signUpButton:
                     Log.e("click","click");
                     signUp();
                     break;
@@ -65,17 +108,17 @@ public class SignUpActivity extends AppCompatActivity {
     private void profileRegister(String uid){
         String email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
         String userName = ((EditText)findViewById(R.id.userNameText)).getText().toString();
-        String college = ((EditText)findViewById(R.id.collegeSet)).getText().toString();
-        String department = ((EditText)findViewById(R.id.departmentSet)).getText().toString();
+        Spinner spinner_co = (Spinner)findViewById(R.id.collegeSpinner);
+        Spinner spinner_ma = (Spinner)findViewById(R.id.majorSpinner);
+        String college = spinner_co.getSelectedItem().toString();
+        String department = spinner_ma.getSelectedItem().toString();
         String studentId = ((EditText)findViewById(R.id.studentIdSet)).getText().toString();
 
 
         if(email.length() > 0){
-//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             StudentInfo studentInfo = new StudentInfo(email,userName,college,department,studentId);
-//            db.collection("users").document(user.getUid()).set(studentInfo)
             db.collection("users").document(uid).set(studentInfo)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
