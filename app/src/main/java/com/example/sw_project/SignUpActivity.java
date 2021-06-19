@@ -21,7 +21,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -33,17 +37,19 @@ public class SignUpActivity extends AppCompatActivity {
     private ArrayAdapter majoradapter;
     private Spinner majorspinner;
 
-    EditText passwordEditText, passwordCheckEditText, correctEditText;
+    EditText passwordEditText, passwordCheckEditText, correctEditText, canUseIdText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         findViewById(R.id.signUpButton).setOnClickListener(onClickListener);
+        findViewById(R.id.canUseIdButton).setOnClickListener(onClickListener);
 
         // 단과대 스크롤
         collegespinner = (Spinner) findViewById(R.id.collegeSpinner);
@@ -100,6 +106,10 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e("click","click");
                     signUp();
                     break;
+                case R.id.canUseIdButton:
+                    Log.e("id","id");
+                    isIdExist();
+                    break;
 
             }
         }
@@ -113,12 +123,11 @@ public class SignUpActivity extends AppCompatActivity {
         String college = spinner_co.getSelectedItem().toString();
         String department = spinner_ma.getSelectedItem().toString();
         String studentId = ((EditText)findViewById(R.id.studentIdSet)).getText().toString();
-
-
+        String id = ((EditText)findViewById(R.id.idText)).getText().toString();
         if(email.length() > 0){
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            StudentInfo studentInfo = new StudentInfo(email,userName,college,department,studentId);
+            StudentInfo studentInfo = new StudentInfo(email,userName,college,department,studentId, id);
             db.collection("users").document(uid).set(studentInfo)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -138,12 +147,40 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    private void isIdExist(){
+        // 아이디 존재여부
+
+        canUseIdText = ((EditText)findViewById(R.id.canUseIdText));
+        canUseIdText.setText("");
+        String willUseIdText = ((EditText)findViewById(R.id.idText)).getText().toString();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .whereEqualTo("id", willUseIdText)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                canUseIdText.setText("이미 존재하는 아이디입니다.");
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        if(canUseIdText.getText().toString().equals("")){
+            canUseIdText.setText("사용 가능한 아이디입니다.");
+        }
+
+    }
     private void signUp(){
 
-        String email = ((EditText)findViewById(R.id.idText)).getText().toString();
-        email += "@proj.com";
+        String idToEmail = ((EditText)findViewById(R.id.idText)).getText().toString();
+        idToEmail += "@proj.com";
         String password = ((EditText)findViewById(R.id.passwdText)).getText().toString();
-        mAuth.createUserWithEmailAndPassword(email, password)
+        mAuth.createUserWithEmailAndPassword(idToEmail, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {

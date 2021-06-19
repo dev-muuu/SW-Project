@@ -9,13 +9,15 @@ public class StudentInfo {
     private String college;
     private String department;
     private String studentId;
+    private String id;
 
-    public StudentInfo(String email, String userName, String college, String department, String studentId){
+    public StudentInfo(String email, String userName, String college, String department, String studentId, String id){
         this.email = email;
         this.userName = userName;
         this.college = college;
         this.department = department;
         this.studentId = studentId;
+        this.id = id;
     }
 
     public String getEmail() {
@@ -57,5 +59,11 @@ public class StudentInfo {
     public void setStudentId(String studentId) { this.studentId = studentId;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 }
