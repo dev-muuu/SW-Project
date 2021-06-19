@@ -148,7 +148,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void isIdExist(){
-        // 아이디 존재여부
 
         canUseIdText = ((EditText)findViewById(R.id.canUseIdText));
         canUseIdText.setText("");
