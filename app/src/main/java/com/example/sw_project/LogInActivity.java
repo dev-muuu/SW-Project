@@ -95,7 +95,7 @@ public class LogInActivity extends AppCompatActivity {
     }
 //임시로 posting 설
     private void startMainActivity(){
-        Intent intent = new Intent(this, PostingActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
