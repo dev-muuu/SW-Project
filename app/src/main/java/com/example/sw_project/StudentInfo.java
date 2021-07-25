@@ -10,14 +10,18 @@ public class StudentInfo {
     private String department;
     private String studentId;
     private String id;
+    private String contestParticipate;
+    private String uid;
 
-    public StudentInfo(String email, String userName, String college, String department, String studentId, String id){
+    public StudentInfo(String email, String userName, String college, String department, String studentId, String id, String contestParticipate, String uid){
         this.email = email;
         this.userName = userName;
         this.college = college;
         this.department = department;
         this.studentId = studentId;
         this.id = id;
+        this.contestParticipate = contestParticipate;
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -65,5 +69,21 @@ public class StudentInfo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getContestParticipate() {
+        return contestParticipate;
+    }
+
+    public void setContestParticipate(String contestParticipate) {
+        this.contestParticipate = contestParticipate;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

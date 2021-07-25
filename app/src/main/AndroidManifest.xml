@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
 
@@ -13,19 +14,41 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SWProject">
-        <activity android:name=".LogInActivity">
+        <activity android:name=".Activity.LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity">
+        <activity android:name=".Activity.SignUpActivity">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity.MainActivity">
         </activity>
-        <activity android:name=".PostingActivity">
+        <activity android:name=".Activity.PostingActivity">
         </activity>
+        <activity android:name=".Activity.PostListActivity">
+        </activity>
+<!--        <activity android:name=".Activity.MyPageActivity">-->
+<!--        </activity>-->
+<!--        <activity android:name=".Activity.ContestScrapActivity">-->
+<!--        </activity>-->
+        <activity android:name=".Activity.RecruitScrapActivity">
+        </activity>
+        <activity android:name=".Activity.ContestDetailActivity">
+        </activity>
+        <activity android:name=".Activity.Setting2Activity">
+        </activity>
+        <activity android:name=".Activity.AlarmSettingActivity">
+        </activity>
+        <activity android:name=".Activity.ViewPostActivity">
+        </activity>
+        <activity android:name=".Activity.FragMainActivity">
+        </activity>
+        <activity android:name=".Activity.PopUpActivity"
+            android:theme="@android:style/Theme.Dialog" />
+
+
     </application>
 
 </manifest>

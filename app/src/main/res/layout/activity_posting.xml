@@ -1,151 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/numtext"
+    android:id="@+id/ViewPost"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
+    >
 
     <LinearLayout
+        android:id="@+id/contentsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/meetWayText"
-            android:layout_width="36dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/meetWayText"
+                android:layout_width="36dp"
+                android:layout_height="59dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/meetway" />
+
+            <CheckBox
+                android:id="@+id/zoom"
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="false"
+
+                android:text="@string/zoom" />
+
+            <CheckBox
+                android:id="@+id/meet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:text="@string/meet" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="59dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/meetway" />
+            android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/zoom"
-            android:layout_width="44dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="false"
-            android:text="@string/zoom" />
+            <TextView
+                android:id="@+id/regionText"
+                android:layout_width="125dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:text="@string/scope" />
 
-        <CheckBox
-            android:id="@+id/meet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:text="@string/meet"
-            />
+            <EditText
+                android:id="@+id/writeRegionText"
+                android:layout_width="286dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:autofillHints="Region"
+                android:ems="10"
+                android:hint="@string/ex"
+                android:inputType="textPersonName" />
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/regionText"
-            android:layout_width="125dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:gravity="center"
-            android:text="@string/scope" />
+            <TextView
+                android:id="@+id/wantNumText"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/peoplecount" />
+
+            <EditText
+                android:id="@+id/writeWantNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/exnum"
+                android:importantForAutofill="no"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/deptText"
+                android:layout_width="52dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/wantdep" />
+
+            <EditText
+                android:id="@+id/writeDeptText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/writedep"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/etcText"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/etc" />
+
+
+        </LinearLayout>
+
 
         <EditText
-            android:id="@+id/writeRegionText"
-            android:layout_width="286dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:ems="10"
-            android:hint="@string/ex"
-            android:inputType="textPersonName"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/wantNumText"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/peoplecount" />
-
-        <EditText
-            android:id="@+id/writeWantNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/writeEtc"
+            android:layout_width="match_parent"
+            android:layout_height="189dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/exnum"
-            android:inputType="number" />
-    </LinearLayout>
+            android:gravity="start|top"
+            android:hint="@string/contents"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:lines="15"
+            android:padding="10dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/deptText"
-            android:layout_width="52dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/wantdep" />
-
-        <EditText
-            android:id="@+id/writeDeptText"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/upLoadButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/writedep"
-            android:inputType="textPersonName"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/etcText"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/etc" />
-
+            android:onClick="CheckBtn"
+            android:text="@string/check"
+            app:backgroundTint="#CB86D6" />
 
     </LinearLayout>
 
+<!--    <include-->
+<!--        layout="@layout/view_loading"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:visibility="gone"/>-->
 
-    <EditText
-        android:id="@+id/writeEtc"
-        android:layout_width="match_parent"
-        android:layout_height="189dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/contents"
-        android:inputType="textMultiLine"
-        android:lines="15"
-        android:padding="10dp" />
 
-    <Button
-        android:id="@+id/upLoadButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/check"
-        app:backgroundTint="#CB86D6" />
 
-</LinearLayout>
+
+</RelativeLayout>
