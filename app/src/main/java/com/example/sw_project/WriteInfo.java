@@ -17,6 +17,7 @@ public class WriteInfo implements Serializable { //인텐드로 class보내기�
     private String postid; //글 삭제시 필요한 포스트 id
     private String writerName;
     private String contestId;
+    private String imgUrl;
 
     private boolean zoomCheck;
     private boolean meetCheck;
@@ -126,6 +127,14 @@ public class WriteInfo implements Serializable { //인텐드로 class보내기�
 
     public void setMeetCheck(boolean meetCheck) {
         this.meetCheck = meetCheck;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
 

@@ -43,10 +43,10 @@ public class SignUpActivity extends AppCompatActivity {
     private ArrayAdapter majoradapter;
     private Spinner majorspinner;
     private String certification;
-    private boolean sswuStudentCertification = false;
     private AlertDialog dialog;
 
     EditText passwordEditText, passwordCheckEditText, correctEditText, canUseIdText, canEmailUseText, emailCertificationText;
+    private String email, userName, college, department, studentId, id, contestParticipate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,19 +101,15 @@ public class SignUpActivity extends AppCompatActivity {
         emailCertificationText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 if (emailCertificationText.getText().toString().equals(certification)) {
                     // correct
                     canEmailUseText.setText("인증되었습니다.");
-                    sswuStudentCertification = true;
                 } else {
                     // incorrect
 //                    canEmailUseText.setText("인증번호가 일치하지 않습니다.");
@@ -152,7 +148,6 @@ public class SignUpActivity extends AppCompatActivity {
     };
 
     private void emailCertification(){
-
         //초기화
         canEmailUseText.setText("");
         String email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
@@ -175,7 +170,6 @@ public class SignUpActivity extends AppCompatActivity {
                 });
 
         if(canEmailUseText.getText().toString().equals("")){
-
             //인증번호 문자/순자 5자리 생성
             Random random = new Random();
             StringBuffer sb = new StringBuffer();
@@ -201,41 +195,6 @@ public class SignUpActivity extends AppCompatActivity {
             });
         }
     }
-
-        private void profileRegister(String uid){
-        String email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
-        String userName = ((EditText)findViewById(R.id.userNameText)).getText().toString();
-        Spinner spinner_co = (Spinner)findViewById(R.id.collegeSpinner);
-        Spinner spinner_ma = (Spinner)findViewById(R.id.majorSpinner);
-        String college = spinner_co.getSelectedItem().toString();
-        String department = spinner_ma.getSelectedItem().toString();
-        String studentId = ((EditText)findViewById(R.id.studentIdSet)).getText().toString();
-        String id = ((EditText)findViewById(R.id.idText)).getText().toString();
-        String contestParticipate = ((EditText)findViewById(R.id.contestCountEditText)).getText().toString();
-
-//        String emailCertificationText = ((EditText)findViewById(R.id.emailCertificationText)).getText().toString();
-
-        if(sswuStudentCertification){
-            StudentInfo studentInfo = new StudentInfo(email,userName,college,department,studentId, id, contestParticipate,uid);
-            db.collection("users").document(uid).set(studentInfo)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void avoid) {
-                            startToast("회원정보 등록을 성공하였습니다");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            startToast("회원정보 등록을 실패하였습니다");
-                            Log.w(TAG, "Error adding document", e);
-                        }
-                    });
-        }else{
-            startToast("회원정보를 입력하세요");
-        }
-    }
-
 
     private void isIdExist(){
 
@@ -267,58 +226,72 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void signUp(){
 
-        String email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
-        String userName = ((EditText)findViewById(R.id.userNameText)).getText().toString();
+        email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
+        userName = ((EditText)findViewById(R.id.userNameText)).getText().toString();
         Spinner spinner_co = (Spinner)findViewById(R.id.collegeSpinner);
         Spinner spinner_ma = (Spinner)findViewById(R.id.majorSpinner);
-        String college = spinner_co.getSelectedItem().toString();
-        String department = spinner_ma.getSelectedItem().toString();
-        String studentId = ((EditText)findViewById(R.id.studentIdSet)).getText().toString();
-        String id = ((EditText)findViewById(R.id.idText)).getText().toString();
-        String contestParticipate = ((EditText)findViewById(R.id.contestCountEditText)).getText().toString();
+        college = spinner_co.getSelectedItem().toString();
+        department = spinner_ma.getSelectedItem().toString();
+        studentId = ((EditText)findViewById(R.id.studentIdSet)).getText().toString();
+        id = ((EditText)findViewById(R.id.idText)).getText().toString();
+        contestParticipate = ((EditText)findViewById(R.id.contestCountEditText)).getText().toString();
 
-//        if (email.equals("") || userName.equals("") || college.equals("") || department.equals("")
-//                || studentId.equals("") || id.equals("")
-//                || contestParticipate.equals("")|| !(canEmailUseText.getText().equals("인증되었습니다."))
-//                || !(correctEditText.getText().toString().equals("일치합니다."))) {
-//
-////            || college.equals("") || department.equals("")
-//
-//            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-//
-//            dialog = builder.setMessage("빈 칸이 있습니다.")
-//                    .setNegativeButton("확인", null)
-//                    .create();
-//            dialog.show();
-//        }
-//        else {
+        if (email.equals("") || userName.equals("") || college.equals("") || department.equals("")
+                || studentId.equals("") || id.equals("") || contestParticipate.equals("")
+                || !(canEmailUseText.getText().toString().equals("인증되었습니다."))
+                || !(correctEditText.getText().toString().equals("일치합니다."))
+                || ! canUseIdText.getText().toString().equals("사용 가능한 아이디입니다.")){
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+
+            dialog = builder.setMessage("빈 칸이 있습니다.")
+                    .setNegativeButton("확인", null)
+                    .create();
+            dialog.show();
+        }
+        else {
             String idToEmail = ((EditText) findViewById(R.id.idText)).getText().toString();
             idToEmail += "@proj.com";
             String password = ((EditText) findViewById(R.id.passwdText)).getText().toString();
             mAuth.createUserWithEmailAndPassword(idToEmail, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "createUserWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
 
-                                    if (task.isSuccessful()) {
-                                        // Sign in success, update UI with the signed-in user's information
-                                        Log.d(TAG, "createUserWithEmail:success");
-                                        FirebaseUser user = mAuth.getCurrentUser();
+                                final String uid = task.getResult().getUser().getUid();
+                                profileRegister(uid);
+                                moveLogInActivity();
 
-                                        final String uid = task.getResult().getUser().getUid();
-                                        profileRegister(uid);
-                                        moveLogInActivity();
-                                        //UI
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                        //UI
-                                    }
-                                }
+                            } else {
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             }
-                    );
+                        }
+                    });
         }
-//    }
+    }
+
+    private void profileRegister(String uid){
+
+        StudentInfo studentInfo = new StudentInfo(email,userName,college,department,studentId, id, contestParticipate, uid);
+        db.collection("users").document(uid).set(studentInfo)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void avoid) {
+                        startToast("회원정보 등록을 성공하였습니다");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        startToast("회원정보 등록을 실패하였습니다");
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
 
     private void moveLogInActivity(){
         Intent intent = new Intent(this, LogInActivity.class);

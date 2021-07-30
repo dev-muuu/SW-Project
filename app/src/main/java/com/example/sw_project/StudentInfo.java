@@ -1,7 +1,5 @@
 package com.example.sw_project;
 
-import android.widget.EditText;
-
 public class StudentInfo {
 
     private String email;
@@ -22,6 +20,9 @@ public class StudentInfo {
         this.id = id;
         this.contestParticipate = contestParticipate;
         this.uid = uid;
+    }
+
+    public StudentInfo() {
     }
 
     public String getEmail() {

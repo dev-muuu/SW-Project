@@ -1,5 +1,6 @@
 package com.example.sw_project.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sw_project.AlarmInfo;
+import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
 import com.example.sw_project.WriteInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +31,7 @@ public class PostingActivity extends AppCompatActivity {
     private  static final String TAG = "Posting";
     private FirebaseUser user;
     public FirebaseFirestore db;
+    private ContestInfo contestInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,10 @@ public class PostingActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        Bundle extras = getIntent().getExtras();
+        Intent intent = getIntent();// 인텐트 받아오기
+        contestInfo = (ContestInfo) intent.getSerializableExtra("contestDetail");
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() { //버튼 클릭시
@@ -72,6 +79,8 @@ public class PostingActivity extends AppCompatActivity {
         writeInfo.setWantDept(wantDept);
         writeInfo.setWantEtc(wantEtc);
         writeInfo.setWantNum(wantNum);
+        writeInfo.setImgUrl(contestInfo.getImageUrl());
+        writeInfo.setContestId(contestInfo.getContestId());
 
         //checkBox 선택 여부 처리
         CheckBox zoomCheck = findViewById(R.id.zoom);
@@ -124,6 +133,7 @@ public class PostingActivity extends AppCompatActivity {
                                         Log.d(TAG, "DocumentSnapshot successfully updated!");
                                         startToast("게시글이 등록되었습니다.");
                                         postingAlarm(writeInfo);
+                                        finish();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {

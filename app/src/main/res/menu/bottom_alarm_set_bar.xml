@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/alarm_tab_1"
+        android:enabled="true"
+        android:icon="?android:attr/textCheckMark"
+        android:title="전체선택"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/alarm_tab_2"
+        android:checked="true"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="전체해제"
+        android:visible="true"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/alarm_tab_3"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="알림 삭제"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/alarm_tab_4"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="읽음 표시"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/alarm_tab_5"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="취소"
+        app:showAsAction="always" />
+
+</menu>
