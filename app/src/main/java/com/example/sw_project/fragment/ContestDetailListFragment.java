@@ -18,6 +18,7 @@ import com.example.sw_project.Activity.PostingActivity;
 import com.example.sw_project.ContestInfo;
 import com.example.sw_project.ParticipateInfo;
 import com.example.sw_project.R;
+import com.example.sw_project.StudentInfo;
 import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.PostListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ContestDetailListFragment extends Fragment {
 
@@ -43,7 +45,7 @@ public class ContestDetailListFragment extends Fragment {
     private FirebaseUser user;
     private String TAG = "ContestDetailListFragment";
     private ContestInfo contestInfo;
-
+    private StudentInfo info;
 
     @Nullable
     @Override
@@ -152,6 +154,8 @@ public class ContestDetailListFragment extends Fragment {
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                 DocumentSnapshot snapshot = transaction.get(sfDocRef);
 
+                info = snapshot.toObject(StudentInfo.class);
+
                 int newParticipateNum = Integer.parseInt(snapshot.getString("contestParticipate")) + 1;
                 transaction.update(sfDocRef, "contestParticipate", String.valueOf(newParticipateNum));
 
@@ -161,6 +165,7 @@ public class ContestDetailListFragment extends Fragment {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "Transaction success!");
+                updateStatisticsDB();
                 startToast("해당 공모전을 참여했습니다.");
                 view.findViewById(R.id.alreadyPartiButton).setEnabled(false);
             }
@@ -170,6 +175,42 @@ public class ContestDetailListFragment extends Fragment {
                 Log.w(TAG, "Transaction failure.", e);
             }
         });
+    }
+
+    private void updateStatisticsDB(){
+
+        final DocumentReference sfDocRef = db.collection("statistics").document("contestParticipateDocument");
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(sfDocRef);
+
+                HashMap<String, ArrayList> major = (HashMap<String, ArrayList>) snapshot.getData().get("major");
+                HashMap<String, ArrayList> schoolNum = (HashMap<String, ArrayList>) snapshot.getData().get("schoolNum");
+
+                Long preCollege = (Long) major.get(info.getCollege()).get(0);
+                major.get(info.getCollege()).set(0,preCollege.intValue() + 1);
+
+                Long preNum = (Long) schoolNum.get(info.getStudentId()).get(0);
+                schoolNum.get(info.getStudentId()).set(0,preNum.intValue() + 1);
+
+                transaction.update(sfDocRef, "major", major);
+                transaction.update(sfDocRef, "schoolNum", schoolNum);
+
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Transaction success!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Transaction failure.", e);
+            }
+        });
+
     }
 
     private void startToast(String msg){

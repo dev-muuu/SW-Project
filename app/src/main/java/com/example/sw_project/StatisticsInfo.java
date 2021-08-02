@@ -33,25 +33,3 @@ public class StatisticsInfo {
     }
 }
 
-class ContestStatisticsInfo{
-
-    //{a,b} a: 공모전 참여횟수, b: 학생
-    private HashMap<String, int[]> schoolNum;
-    private HashMap<String, int[]> major;
-
-    public HashMap<String, int[]> getSchoolNum() {
-        return schoolNum;
-    }
-
-    public void setSchoolNum(HashMap<String, int[]> schoolNum) {
-        this.schoolNum = schoolNum;
-    }
-
-    public HashMap<String, int[]> getMajor() {
-        return major;
-    }
-
-    public void setMajor(HashMap<String, int[]> major) {
-        this.major = major;
-    }
-}

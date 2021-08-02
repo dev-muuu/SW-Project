@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sw_project.ContestStatisticsInfo;
 import com.example.sw_project.MailSend;
 import com.example.sw_project.R;
 import com.example.sw_project.StudentInfo;
@@ -26,10 +27,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -53,7 +58,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         findViewById(R.id.signUpButton).setOnClickListener(onClickListener);
@@ -193,6 +197,7 @@ public class SignUpActivity extends AppCompatActivity {
             AsyncTask.execute(() -> {
                 MailSend.mailSend(email, certification);
             });
+            startToast("학교 이메일로 인증번호가 발송되었습니다.");
         }
     }
 
@@ -250,8 +255,7 @@ public class SignUpActivity extends AppCompatActivity {
             dialog.show();
         }
         else {
-            String idToEmail = ((EditText) findViewById(R.id.idText)).getText().toString();
-            idToEmail += "@proj.com";
+            String idToEmail = id + "@proj.com";
             String password = ((EditText) findViewById(R.id.passwdText)).getText().toString();
             mAuth.createUserWithEmailAndPassword(idToEmail, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -275,12 +279,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void profileRegister(String uid){
-
         StudentInfo studentInfo = new StudentInfo(email,userName,college,department,studentId, id, contestParticipate, uid);
         db.collection("users").document(uid).set(studentInfo)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void avoid) {
+                        statisticsAdd();
                         startToast("회원정보 등록을 성공하였습니다");
                     }
                 })
@@ -291,6 +295,95 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+    }
+
+    private void statisticsAdd(){
+
+        DocumentReference docRef = db.collection("statistics").document("contestParticipateDocument");
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                HashMap<String, ArrayList> major = (HashMap<String, ArrayList>) documentSnapshot.getData().get("major");
+                HashMap<String, ArrayList> schoolNum = (HashMap<String, ArrayList>) documentSnapshot.getData().get("schoolNum");
+
+                if(major == null) {
+                    major = new HashMap<>();
+                    schoolNum = new HashMap<>();
+                }
+
+                //{a,b} a: 공모전 참여횟수, b: 학생
+
+                ArrayList<Integer> newMajor = new ArrayList<>();
+                ArrayList<Integer> newSchool = new ArrayList<>();
+                Long a, b;
+
+                if(major.containsKey(college)) {
+                    a = (Long) major.get(college).get(0);
+                    b = (Long) major.get(college).get(1);
+
+                    newMajor.add(0, a.intValue() + Integer.parseInt(contestParticipate));
+                    newMajor.add(1, b.intValue() + 1);
+                }
+                else {
+                    newMajor.add(0, Integer.parseInt(contestParticipate));
+                    newMajor.add(1, 1);
+                }
+
+                if(schoolNum.containsKey(studentId)) {
+                    a = (Long) schoolNum.get(studentId).get(0);
+                    b = (Long) schoolNum.get(studentId).get(1);
+
+                    newSchool.add(0, a.intValue() + Integer.parseInt(contestParticipate));
+                    newSchool.add(1, b.intValue() + 1);
+                }
+                else {
+                    newSchool.add(0, Integer.parseInt(contestParticipate));
+                    newSchool.add(1, 1);
+                }
+
+                major.put(college, newMajor);
+                schoolNum.put(studentId,newSchool);
+
+                ContestStatisticsInfo newClass = new ContestStatisticsInfo();
+                newClass.setMajor(major);
+                newClass.setSchoolNum(schoolNum);
+
+                db.collection("statistics").document("contestParticipateDocument").set(newClass);
+
+//                DocumentReference washingtonRef = db.collection("statistics").document("contestParticipateDocument");
+//                washingtonRef
+//                        .update("major", major)
+//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.w(TAG, "Error updating document", e);
+//                            }
+//                        });
+//
+//                washingtonRef = db.collection("statistics").document("contestParticipateDocument");
+//                washingtonRef
+//                        .update("schoolNum", schoolNum)
+//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.w(TAG, "Error updating document", e);
+//                            }
+//                        });
+            }
+        });
     }
 
     private void moveLogInActivity(){

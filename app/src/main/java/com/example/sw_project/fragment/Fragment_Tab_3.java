@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,23 +17,24 @@ import com.example.sw_project.Activity.ContestScrapActivity;
 import com.example.sw_project.Activity.MainActivity;
 import com.example.sw_project.Activity.RecruitScrapActivity;
 import com.example.sw_project.R;
+import com.example.sw_project.StudentInfo;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Fragment_Tab_3 extends Fragment {
 
@@ -46,6 +46,8 @@ public class Fragment_Tab_3 extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "MyPageData";
     private RelativeLayout loaderLayout;
+    private StudentInfo info;
+    private HashMap<String, ArrayList> major;
 
     public static Fragment_Tab_3 newInstance() {
         return new Fragment_Tab_3();
@@ -57,7 +59,6 @@ public class Fragment_Tab_3 extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.activity_my_page,container,false);
-
         view.findViewById(R.id.contestScrapButton).setOnClickListener(onClickListener);
         view.findViewById(R.id.recruitButton).setOnClickListener(onClickListener);
 
@@ -85,67 +86,56 @@ public class Fragment_Tab_3 extends Fragment {
     };
 
 
-    private void collegeStatisticQuery(final int userCount, final String userCollege){
+    private void collegeStatisticQuery(){
 
         totalStatisticNumber = view.findViewById(R.id.totalStatisticNumber);
         totalStatisticsText = view.findViewById(R.id.totalStatisticsText);
         collegeStatisticsNumber = view.findViewById(R.id.collegeStatisticsNumber);
         collegeStatisticsText = view.findViewById(R.id.collegeStatisticsText);
 
-        db.collection("users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        double totalAverage = 0;
-                        int totalUserNumber = 0;
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData().get("contestParticipate"));
-                                totalAverage += Integer.parseInt(String.valueOf(document.getData().get("contestParticipate")));
-                                totalUserNumber++;
-                            }
-                            totalAverage /= totalUserNumber;
-                            String number = String.format("%.1f vs %d",totalAverage,userCount);
-                            String what = totalAverage <= userCount ? "많이" : "적게";
-                            String text = String.format("수정이들보다 평균적으로 %s 참여했습니다",what);
-                            totalStatisticNumber.setText(number);
-                            totalStatisticsText.setText(text);
-                            setTotalGraph(userCount, totalAverage);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        //전체 데이터
+        double totalContest = 0;
+        double totalStudent = 0;
+        for(Map.Entry<String, ArrayList> each : major.entrySet()){
+            Long convert = (Long) each.getValue().get(0);
+            double contest = convert.doubleValue();
+            totalContest += contest;
 
-        db.collection("users")
-                .whereEqualTo("college",userCollege)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        double collegeAverage = 0;
-                        int collegeUserNumber = 0;
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData().get("contestParticipate"));
-                                collegeAverage += Integer.parseInt(String.valueOf(document.getData().get("contestParticipate")));
-                                collegeUserNumber++;
-                            }
-                            collegeAverage /= collegeUserNumber;
-                            String number = String.format("%.1f vs %d",collegeAverage,userCount);
-                            String what = collegeAverage <= userCount ? "많이" : "적게";
-                            String text = String.format("%s 수정이들보다 평균적으로 %s 참여했습니다",userCollege,what);
-                            collegeStatisticsNumber.setText(number);
-                            collegeStatisticsText.setText(text);
+            Long change = (Long) each.getValue().get(1);
+            double student = change.doubleValue();
+            totalStudent += student;
+        }
 
-                            setCollegeGraph(userCount, collegeAverage);
-                            loaderLayout.setVisibility(View.INVISIBLE);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        totalContest /= totalStudent;
+
+        String number = String.format("%.1f vs %d",totalContest,Integer.parseInt(info.getContestParticipate()));
+        String what = totalContest <= Integer.parseInt(info.getContestParticipate()) ? "많이" : "적게";
+        String text = String.format("수정이들보다 평균적으로 %s 참여했습니다",what);
+        totalStatisticNumber.setText(number);
+        totalStatisticsText.setText(text);
+        setTotalGraph(totalContest);
+
+        // 단과대 데이터
+
+        try{
+            Long a = (Long) major.get(info.getCollege()).get(0);
+            Long b = (Long) major.get(info.getCollege()).get(1);
+
+            double contest = a.doubleValue();
+            double student = b.doubleValue();
+            contest /= student;
+
+            String number2 = String.format("%.1f vs %d",contest, Integer.parseInt(info.getContestParticipate()));
+            String what2 = contest <= Integer.parseInt(info.getContestParticipate()) ? "많이" : "적게";
+            String text2 = String.format("%s 수정이들보다 평균적으로 %s 참여했습니다",info.getCollege(),what2);
+            collegeStatisticsNumber.setText(number2);
+            collegeStatisticsText.setText(text2);
+
+            setCollegeGraph(contest);
+        } catch (NullPointerException e){
+            System.out.println("no");
+        }
+        loaderLayout.setVisibility(View.INVISIBLE);
 
     }
 
@@ -161,23 +151,26 @@ public class Fragment_Tab_3 extends Fragment {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    int userParticipateCount = 0;
-                    String userCollege = "";
-                    String userDepartment;
-                    String userStudentId;
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData().get("contestParticipate"));
-                        userParticipateCount = Integer.parseInt(String.valueOf(document.getData().get("contestParticipate")));
-                        myPageUserText.setText(document.getData().get("userName").toString() + "의 공모전 현황");
-                        userCollege = document.getData().get("college").toString();
-                        userDepartment = document.getData().get("department").toString();
-                        userStudentId = document.getData().get("studentId").toString();
-                        userInformationText.setText(userCollege + " " + userDepartment + " " + userStudentId+"학번");
+
+                        info = document.toObject(StudentInfo.class);
+                        myPageUserText.setText(info.getUserName() + "의 공모전 현황");
+                        userInformationText.setText(info.getCollege() + " " + info.getDepartment() + " " + info.getStudentId()+"학번");
                     } else {
                         Log.d(TAG, "No such document");
                     }
-                    collegeStatisticQuery(userParticipateCount, userCollege);
+
+                    DocumentReference docRef = db.collection("statistics").document("contestParticipateDocument");
+                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            major = (HashMap<String, ArrayList>) documentSnapshot.getData().get("major");
+                            collegeStatisticQuery();
+                        }
+                    });
+
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
@@ -185,7 +178,7 @@ public class Fragment_Tab_3 extends Fragment {
         });
     }
 
-    private void setTotalGraph(final int userCount, final double average){
+    private void setTotalGraph(final double average){
 
         //first pieChart
         pieChartTotal = (PieChart)view.findViewById(R.id.totalStatisticGraph);
@@ -198,7 +191,7 @@ public class Fragment_Tab_3 extends Fragment {
         pieChartTotal.setTransparentCircleRadius(61f);
 
         ArrayList<PieEntry> yValues = new ArrayList<PieEntry>();
-        yValues.add(new PieEntry(userCount,"My"));
+        yValues.add(new PieEntry(Integer.parseInt(info.getContestParticipate()),"My"));
         yValues.add(new PieEntry((int)average,"SSWU"));
 
         PieDataSet dataSet = new PieDataSet(yValues,"Count");
@@ -213,7 +206,7 @@ public class Fragment_Tab_3 extends Fragment {
 
     }
 
-    private void setCollegeGraph(final int userCount, final double average){
+    private void setCollegeGraph(final double average){
 
         //second pieChart
         pieChartCollege = (PieChart)view.findViewById(R.id.collegeStatisticGraph);
@@ -226,7 +219,7 @@ public class Fragment_Tab_3 extends Fragment {
         pieChartCollege.setTransparentCircleRadius(61f);
 
         ArrayList<PieEntry> yValuesSecond = new ArrayList<PieEntry>();
-        yValuesSecond.add(new PieEntry(userCount,"My"));
+        yValuesSecond.add(new PieEntry(Integer.parseInt(info.getContestParticipate()),"My"));
         yValuesSecond.add(new PieEntry((int)(average),"College"));
 
         PieDataSet dataSetSecond = new PieDataSet(yValuesSecond,"Count");
