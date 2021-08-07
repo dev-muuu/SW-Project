@@ -75,16 +75,15 @@ public class Fragment_Tab_3 extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.contestScrapButton:
-                    ((MainActivity)getActivity()).replaceFragment(ContestScrapActivity.newInstance());
+                    ((MainActivity)getActivity()).replaceFragment(ContestScrapActivity.newInstance(), "contestScrap");
                     break;
                 case R.id.recruitButton:
-                    ((MainActivity)getActivity()).replaceFragment(RecruitScrapActivity.newInstance());
+                    ((MainActivity)getActivity()).replaceFragment(RecruitScrapActivity.newInstance(), "recruitScrap");
                     break;
             }
 
         }
     };
-
 
     private void collegeStatisticQuery(){
 
@@ -116,7 +115,6 @@ public class Fragment_Tab_3 extends Fragment {
         setTotalGraph(totalContest);
 
         // 단과대 데이터
-
         try{
             Long a = (Long) major.get(info.getCollege()).get(0);
             Long b = (Long) major.get(info.getCollege()).get(1);
@@ -140,6 +138,7 @@ public class Fragment_Tab_3 extends Fragment {
     }
 
     public void userParticipateQuery(){
+
         loaderLayout.setVisibility(View.VISIBLE);
         String userUid = user.getUid();
 
@@ -170,7 +169,6 @@ public class Fragment_Tab_3 extends Fragment {
                             collegeStatisticQuery();
                         }
                     });
-
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }

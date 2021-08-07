@@ -1,27 +1,22 @@
 package com.example.sw_project.Activity;
 
-import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw_project.AlarmInfo;
 import com.example.sw_project.R;
-import com.example.sw_project.adapter.AlarmListAdapter;
 import com.example.sw_project.adapter.AlarmSettingAdapter;
-import com.example.sw_project.fragment.Fragment_Tab_4;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,6 +41,8 @@ public class AlarmSettingActivity extends AppCompatActivity {
     private FirebaseUser user;
     private static final String TAG = "AlarmSettingActivity";
     private ArrayList<AlarmInfo> alarmList;
+    private AlertDialog dialog;
+    private AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,14 +108,33 @@ public class AlarmSettingActivity extends AppCompatActivity {
                     allUnSelectButtonClick();
                     break;
                 case R.id.floatingChangeReadButton:
-                    changeToReadButtonClick();
+                    builder = new AlertDialog.Builder(AlarmSettingActivity.this);
+                    dialog = builder.setMessage("선택한 알림들을 읽음 표시로 전환합니다")
+                            .setNegativeButton("CANCEL", null)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    changeToReadButtonClick();
+                                }
+                            })
+                            .create();
+                    dialog.show();
                     break;
                 case R.id.floatingDeleteButton:
-                    deleteButtonClick();
+                    builder = new AlertDialog.Builder(AlarmSettingActivity.this);
+                    dialog = builder.setMessage("선택한 알림들을 삭제합니다")
+                            .setNegativeButton("CANCEL", null)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deleteButtonClick();
+                                }
+                            })
+                            .create();
+                    dialog.show();
                     break;
                 case R.id.floatingPrestateButton:
                     finish();
-                    //리스트 재로딩 코드 추가
                     break;
             }
         }

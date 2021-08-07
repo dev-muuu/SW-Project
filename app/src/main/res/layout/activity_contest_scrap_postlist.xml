@@ -35,8 +35,24 @@
             android:text="공모전 참여 완료" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/postlistRecycle"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/postlistRecycle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/isPostZeroText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="해당 공모전의 팀원 모집글이 없습니다"
+            android:textSize="16dp"
+            android:visibility="invisible" />
+    </RelativeLayout>
 </LinearLayout>

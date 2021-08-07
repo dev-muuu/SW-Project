@@ -1,17 +1,15 @@
 package com.example.sw_project.Activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,54 +50,17 @@ public class ContestScrapActivity extends Fragment {
 
     private Activity activity;
     private MaterialCalendarView calendarView;
-    private RecyclerView recycleView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private static final String TAG = "ContestScrapActivity";
-    private final ArrayList<String> temporaryList = new ArrayList<>();
-    private final ArrayList<CalendarDay> scrapContestDateList = new ArrayList<>();
+    public RelativeLayout layout;
+    public RecyclerView recycleView;
+    public RecyclerView.Adapter mAdapter;
+    public RecyclerView.LayoutManager layoutManager;
 
-    private ArrayList<ContestInfo> scrapContestList = new ArrayList<>();
-//    private ArrayList<ContestInfo> scrapContestNameList = new ArrayList<>();
-
-    // item 터치
-    interface ClickListener {
-        void onClick(View view, int position);
-
-    }
-
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildAdapterPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-        }
-    }
+    public FirebaseUser user;
+    public FirebaseFirestore db;
+    public static final String TAG = "ContestScrapActivity";
+    public ArrayList<String> temporaryList;
+    public ArrayList<CalendarDay> scrapContestDateList;
+    public ArrayList<ContestInfo> scrapContestList;
 
     @Nullable
     @Override
@@ -108,18 +69,51 @@ public class ContestScrapActivity extends Fragment {
 
         view = inflater.inflate(R.layout.activity_my_page_contest_scrap,container,false);
 
-
         view.findViewById(R.id.showCalendarButton).setOnClickListener(onClickListener);
         view.findViewById(R.id.showListButton).setOnClickListener(onClickListener);
 
         calendarView = view.findViewById(R.id.calendarMaterial);
-        calendarView.addDecorators(new SundayRed(), new SaturdayBlue(), new OutOfMonth());
-
         recycleView = view.findViewById(R.id.contestListView);
         calendarView.setVisibility(View.INVISIBLE);
+        layout = view.findViewById(R.id.listContainLayout);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+
+        getDataLoad();
+
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+
+                int year, month, day;
+                year = date.getYear() - 2000;
+                month = date.getMonth()+1;
+                day = date.getDay();
+                String value = String.format("%d-%02d-%02d",year,month,day);
+                String dateTitle = month+"월 "+day+"일";
+
+                mOnPopupClick(value, dateTitle);
+
+            }
+        });
+
+        return view;
+    }
+
+    public void initRecycler(){
+
+        calendarView.removeDecorators();
+        calendarView.addDecorators(new SundayRed(), new SaturdayBlue());
+        layoutManager = new LinearLayoutManager(activity);
+        recycleView.setLayoutManager(layoutManager);
+        mAdapter = new ContestScrapAdapter(new ArrayList<ContestInfo>(), getActivity());
+        recycleView.setAdapter(mAdapter);
+    }
+
+    public void getDataLoad(){
+
+        initRecycler();
 
         db.collection("scrapContest")
                 .whereEqualTo("scrapUserUid",user.getUid())
@@ -128,14 +122,22 @@ public class ContestScrapActivity extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            ArrayList<ScrapInfo> scrapArray = new ArrayList<>();
 
+                            ArrayList<ScrapInfo> scrapArray = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 scrapArray.add(document.toObject(ScrapInfo.class));
                             }
 
+                            if(scrapArray.size() == 0)
+                                view.findViewById(R.id.isContestZeroText).setVisibility(View.VISIBLE);
+                            else
+                                view.findViewById(R.id.isContestZeroText).setVisibility(View.INVISIBLE);
+
                             // contestId에 해당하는 contest 불러오기
+                            temporaryList = new ArrayList<>();
+                            scrapContestList = new ArrayList<>();
+
                             for(ScrapInfo findPost : scrapArray){
                                 db.collection("contests")
                                         .whereEqualTo("contestId", findPost.getContestId())
@@ -144,10 +146,14 @@ public class ContestScrapActivity extends Fragment {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
+
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                                         Log.d(TAG, document.getId() + " => " + document.getData());
                                                         scrapContestList.add(document.toObject(ContestInfo.class));
-                                                        temporaryList.add(document.getData().get("endDate").toString());
+                                                        try {
+                                                            temporaryList.add(document.getData().get("endDate").toString());
+                                                        }catch (NullPointerException e){
+                                                        }
                                                     }
                                                     convertDateType();
                                                     recycleView.setHasFixedSize(true);
@@ -155,6 +161,7 @@ public class ContestScrapActivity extends Fragment {
                                                     recycleView.setLayoutManager(layoutManager);
                                                     mAdapter = new ContestScrapAdapter(scrapContestList, getActivity());
                                                     recycleView.setAdapter(mAdapter);
+
                                                 } else {
                                                     Log.d(TAG, "Error getting documents: ", task.getException());
                                                 }
@@ -168,36 +175,6 @@ public class ContestScrapActivity extends Fragment {
                     }
                 });
 
-        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-
-                int year, month, day;
-                year = date.getYear() - 2000;
-                month = date.getMonth()+1;
-                day = date.getDay();
-                String value = String.format("%d-%02d-%02d",year,month,day);
-                System.out.println(value);
-                String dateTitle = month+"월 "+day+"일";
-
-                mOnPopupClick(value, dateTitle);
-
-            }
-        });
-
-        recycleView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recycleView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                ContestInfo detailContest = scrapContestList.get(position);
-
-                // ...?
-                Intent intent = new Intent(getContext(), ContestDetailActivity.class);
-                intent.putExtra("contestName",detailContest.getContestName());
-                startActivity(intent);
-            }
-        }));
-
-        return view;
     }
 
     public void mOnPopupClick(String value, String dateTitle){
@@ -223,10 +200,10 @@ public class ContestScrapActivity extends Fragment {
             switch (v.getId()) {
                 case R.id.showCalendarButton:
                     calendarView.setVisibility(View.VISIBLE);
-                    recycleView.setVisibility(View.INVISIBLE);
+                    layout.setVisibility(View.INVISIBLE);
                     break;
                 case R.id.showListButton:
-                    recycleView.setVisibility(View.VISIBLE);
+                    layout.setVisibility(View.VISIBLE);
                     calendarView.setVisibility(View.INVISIBLE);
                     break;
             }
@@ -234,8 +211,11 @@ public class ContestScrapActivity extends Fragment {
         }
     };
 
-    private void convertDateType(){
+    public void convertDateType(){
+
         String[] dateStorage = new String[3];
+        scrapContestDateList = new ArrayList<>();
+
         for (String string : temporaryList) {
             StringTokenizer skn = new StringTokenizer(string, "-");
             for (int i = 0; skn.hasMoreTokens(); i++) {
@@ -284,22 +264,6 @@ public class ContestScrapActivity extends Fragment {
         @Override
         public void decorate(DayViewFacade view) {
             view.addSpan(new ForegroundColorSpan(Color.RED));
-        }
-    }
-
-    class OutOfMonth implements DayViewDecorator{
-        private final Calendar calendar = Calendar.getInstance();
-
-        @Override
-        public boolean shouldDecorate(CalendarDay day) {
-            day.copyTo(calendar);
-            int monthDay = calendar.get(Calendar.DAY_OF_MONTH);
-            return monthDay == Calendar.DAY_OF_MONTH;
-        }
-
-        @Override
-        public void decorate(DayViewFacade view) {
-            view.addSpan(new ForegroundColorSpan(Color.GRAY));
         }
     }
 

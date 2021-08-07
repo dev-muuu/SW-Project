@@ -76,10 +76,25 @@
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/contestListView"
+        <RelativeLayout
+            android:id="@+id/listContainLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/contestListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/isContestZeroText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="스크랩한 공모전이 없습니다."
+                android:textSize="16dp"
+                android:visibility="invisible" />
+        </RelativeLayout>
 
     </FrameLayout>
 </LinearLayout>

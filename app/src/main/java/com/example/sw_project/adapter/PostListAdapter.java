@@ -22,7 +22,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.postVi
 
     private ArrayList<WriteInfo> arrayList;
     private Activity activity;
-    private static final String TAG="postAdapter"; //디버그때 Log에 쓰일 TAG
+    private static final String TAG="postAdapter";
 
 
     public PostListAdapter(ArrayList<WriteInfo> arrayList, Activity activity) {

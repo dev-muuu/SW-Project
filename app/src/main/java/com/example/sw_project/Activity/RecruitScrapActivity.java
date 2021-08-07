@@ -32,10 +32,9 @@ public class RecruitScrapActivity extends Fragment {
     View view;
 
     private final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-    private FirebaseFirestore db;
-    private DatabaseReference mDatabase;
-    private String TAG = "RecruitActivity";
-    private FirebaseUser user;
+    public FirebaseFirestore db;
+    public String TAG = "RecruitActivity";
+    public FirebaseUser user;
 
     public static RecruitScrapActivity newInstance() {
         return new RecruitScrapActivity();
@@ -46,10 +45,29 @@ public class RecruitScrapActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.activity_postlist, container, false);
+        view = inflater.inflate(R.layout.activity_mypage_recruit, container, false);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
+
+        getScrapData();
+
+        return view;
+    }
+
+    public void initRecyclerView(){
+
+        RecyclerView recyclerView = view.findViewById(R.id.recruitRecycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView.Adapter mAdapter = new PostListAdapter(new ArrayList<WriteInfo>(), getActivity());
+        recyclerView.setAdapter(mAdapter);
+    }
+
+    public void getScrapData(){
+
+        initRecyclerView();
+
         db.collection("scrapsPost")
                 .whereEqualTo("scrapUserUid",user.getUid())
                 .get()
@@ -63,6 +81,11 @@ public class RecruitScrapActivity extends Fragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 scrapArray.add(document.toObject(ScrapInfo.class));
                             }
+
+                            if(scrapArray.size() == 0)
+                                view.findViewById(R.id.isScrapPostText).setVisibility(View.VISIBLE);
+                            else
+                                view.findViewById(R.id.isScrapPostText).setVisibility(View.INVISIBLE);
 
                             // postId에 해당하는 post 불러오기
                             ArrayList<WriteInfo> writeArray = new ArrayList<>();
@@ -78,7 +101,7 @@ public class RecruitScrapActivity extends Fragment {
                                                         Log.d(TAG, document.getId() + " => " + document.getData());
                                                         writeArray.add(document.toObject(WriteInfo.class));
                                                     }
-                                                    RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
+                                                    RecyclerView recyclerView = view.findViewById(R.id.recruitRecycler);
                                                     recyclerView.setHasFixedSize(true);
                                                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                                                     RecyclerView.Adapter madapter = new PostListAdapter(writeArray, getActivity());
@@ -89,14 +112,11 @@ public class RecruitScrapActivity extends Fragment {
                                             }
                                         });
                             }
-
                         }else {
                             Log.w(TAG, "Error => ", task.getException());
                         }
                     }
                 });
-
-        return view;
     }
 
 }

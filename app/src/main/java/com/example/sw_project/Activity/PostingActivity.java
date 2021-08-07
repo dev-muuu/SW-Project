@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sw_project.AlarmInfo;
@@ -40,10 +41,12 @@ public class PostingActivity extends AppCompatActivity {
 
         findViewById(R.id.upLoadButton).setOnClickListener(onClickListener);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Bundle extras = getIntent().getExtras();
         Intent intent = getIntent();// 인텐트 받아오기
         contestInfo = (ContestInfo) intent.getSerializableExtra("contestDetail");
     }
@@ -161,7 +164,7 @@ public class PostingActivity extends AppCompatActivity {
 
         AlarmInfo alarmInfo = new AlarmInfo();
 
-        alarmInfo.setDestinationUid("8glwlKqosYPghXZMRxMxW6CbNks2");
+        alarmInfo.setDestinationUid("GtXz3dLpDCTz0CyBJCbV6US1HPw1");
         alarmInfo.setUid(user.getUid());
         alarmInfo.setUserNickname(writeInfo.getWriterName());
         alarmInfo.setKind(0);

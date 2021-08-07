@@ -10,8 +10,17 @@ public class ContestInfo implements Serializable{
      private String contestId;
      private String imageUrl;
      private String detailUrl;
+     private String inOut;
 
     public ContestInfo() {
+    }
+
+    public String getInOut() {
+        return inOut;
+    }
+
+    public void setInOut(String inOut) {
+        this.inOut = inOut;
     }
 
     public String getContestId() {

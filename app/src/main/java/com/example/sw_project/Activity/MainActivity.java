@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         actionBar.hide();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
         Fragment_Tab_1 fragment1 = new Fragment_Tab_1();
         Fragment_Tab_2 fragment2 = new Fragment_Tab_2();
         Fragment_Tab_3 fragment3 = new Fragment_Tab_3();
@@ -78,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment, String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.main_layout, fragment).commit();
+        transaction.replace(R.id.main_layout, fragment, tag).commit();
         transaction.addToBackStack(null);
     }
 
@@ -91,11 +90,34 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             //fragment4 알림 편집 액티비티 종료 이후 자동 새로고침
+            Fragment_Tab_1 mf = (Fragment_Tab_1) getSupportFragmentManager().findFragmentById(R.id.main_layout);
+            mf.listDbGet();
+        } catch (ClassCastException exception) {
+        }
+
+        try {
+            //fragment4 알림 편집 액티비티 종료 이후 자동 새로고침
             Fragment_Tab_4 mf = (Fragment_Tab_4) getSupportFragmentManager().findFragmentById(R.id.main_layout);
             mf.alarmListDataGet();
         } catch (ClassCastException exception) {
-            return;
         }
+
+        try {
+            RecruitScrapActivity mf = (RecruitScrapActivity) getSupportFragmentManager().findFragmentByTag("recruitScrap");
+            mf.getScrapData();
+        } catch (ClassCastException exception) {
+        } catch (NullPointerException e){
+
+        }
+
+        try {
+            ContestScrapActivity mf = (ContestScrapActivity) getSupportFragmentManager().findFragmentByTag("contestScrap");
+            mf.getDataLoad();
+        } catch (ClassCastException exception) {
+        } catch (NullPointerException e){
+        }
+
+
     }
 
 }

@@ -126,7 +126,6 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
     }
 
@@ -167,38 +166,37 @@ public class SignUpActivity extends AppCompatActivity {
                                 canEmailUseText.setText("이미 인증이 완료된 이메일입니다.");
                                 return;
                             }
+                            if(canEmailUseText.getText().toString().equals("")){
+                                //인증번호 문자/순자 5자리 생성
+                                Random random = new Random();
+                                StringBuffer sb = new StringBuffer();
+                                for(int i = 0; i < 5; i++){
+                                    int index = random.nextInt(3);
+                                    switch (index){
+                                        case 0 :
+                                            sb.append((char)(random.nextInt(26)+97));
+                                            break;
+                                        case 1 :
+                                            sb.append((char)(random.nextInt(26)+65));
+                                            break;
+                                        case 2 :
+                                            sb.append(random.nextInt(10));
+                                            break;
+                                    }
+                                }
+                                System.out.println(sb);
+                                certification = sb.toString();
+
+                                AsyncTask.execute(() -> {
+                                    MailSend.mailSend(email, certification);
+                                });
+                                startToast("학교 이메일로 인증번호가 발송되었습니다.");
+                            }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-        if(canEmailUseText.getText().toString().equals("")){
-            //인증번호 문자/순자 5자리 생성
-            Random random = new Random();
-            StringBuffer sb = new StringBuffer();
-            for(int i = 0; i < 5; i++){
-                int index = random.nextInt(3);
-                switch (index){
-                    case 0 :
-                        sb.append((char)(random.nextInt(26)+97));
-                        break;
-                    case 1 :
-                        sb.append((char)(random.nextInt(26)+65));
-                        break;
-                    case 2 :
-                        sb.append(random.nextInt(10));
-                        break;
-                }
-            }
-            System.out.println(sb);
-            certification = sb.toString();
-
-            AsyncTask.execute(() -> {
-                MailSend.mailSend(email, certification);
-            });
-            startToast("학교 이메일로 인증번호가 발송되었습니다.");
-        }
     }
 
     private void isIdExist(){
@@ -313,7 +311,6 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 //{a,b} a: 공모전 참여횟수, b: 학생
-
                 ArrayList<Integer> newMajor = new ArrayList<>();
                 ArrayList<Integer> newSchool = new ArrayList<>();
                 Long a, b;
@@ -350,38 +347,6 @@ public class SignUpActivity extends AppCompatActivity {
                 newClass.setSchoolNum(schoolNum);
 
                 db.collection("statistics").document("contestParticipateDocument").set(newClass);
-
-//                DocumentReference washingtonRef = db.collection("statistics").document("contestParticipateDocument");
-//                washingtonRef
-//                        .update("major", major)
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                Log.d(TAG, "DocumentSnapshot successfully updated!");
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.w(TAG, "Error updating document", e);
-//                            }
-//                        });
-//
-//                washingtonRef = db.collection("statistics").document("contestParticipateDocument");
-//                washingtonRef
-//                        .update("schoolNum", schoolNum)
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                Log.d(TAG, "DocumentSnapshot successfully updated!");
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.w(TAG, "Error updating document", e);
-//                            }
-//                        });
             }
         });
     }

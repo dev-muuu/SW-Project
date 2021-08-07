@@ -1,6 +1,7 @@
 package com.example.sw_project.Activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +16,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
 import com.example.sw_project.ScrapInfo;
 import com.example.sw_project.WriteInfo;
@@ -35,6 +38,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ViewPostActivity extends AppCompatActivity {
@@ -43,30 +47,37 @@ public class ViewPostActivity extends AppCompatActivity {
     private Activity activity;
     private WriteInfo writeinfo;
     private ScrapInfo alreadyScrap;
+    private String newScrapId;
     private FirebaseUser user;
     private String TAG = "ScrapActivity";
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
     private Button scrapButton, scrapCancelButton;
+    private ArrayList<String> commentId, scrapId;
+    private AlertDialog dialog;
+    private AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post);
 
-        //상단 타이틀 제
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("");
-
         scrapButton = findViewById(R.id.scrapButton);
         scrapButton.setOnClickListener(onClickListener);
         scrapCancelButton = findViewById(R.id.scrapCancelButton);
         scrapCancelButton.setOnClickListener(onClickListener);
+        findViewById(R.id.moveContestPageButton).setOnClickListener(onClickListener);
 
-        Bundle extras = getIntent().getExtras();
         Intent intent = getIntent();// 인텐트 받아오기
         writeinfo = (WriteInfo) intent.getSerializableExtra("writeInfo");
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+
+        ActionBar actionBar = getSupportActionBar();
+        if(writeinfo.getUserUid().equals(user.getUid()))
+            actionBar.setTitle("");
+        else
+            actionBar.hide();
 
 //        titleView =findViewById(R.id.titleView);
 //        titleView.setText(extras.getString("title"));
@@ -135,10 +146,28 @@ public class ViewPostActivity extends AppCompatActivity {
                     break;
                 case R.id.scrapCancelButton:
                     scrapDbDelete();
-
+                    break;
+                case R.id.moveContestPageButton:
+                    moveContestActivity();
+                    break;
             }
         }
     };
+
+    private void moveContestActivity(){
+
+        DocumentReference docRef = db.collection("contests").document(writeinfo.getContestId());
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ContestInfo contestInfo = documentSnapshot.toObject(ContestInfo.class);
+
+                Intent intent = new Intent(getApplicationContext(), ContestDetailActivity.class);
+                intent.putExtra("contestDetail", contestInfo);
+                startActivity(intent);
+            }
+        });
+    }
 
     private void scrapDbUpload(){
 
@@ -159,6 +188,7 @@ public class ViewPostActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                        newScrapId = documentReference.getId();
                                         scrapNumberIncrease();
                                         startToast("해당 게시글이 스크랩되었습니다.");
                                         scrapButton.setVisibility(View.INVISIBLE);
@@ -209,7 +239,15 @@ public class ViewPostActivity extends AppCompatActivity {
 
     private void scrapDbDelete(){
 
-        db.collection("scrapsPost").document(alreadyScrap.getScrapId())
+        //스크랩 후 바로 스크랩 취소하는 경우
+        String document;
+        try{
+            document = alreadyScrap.getScrapId();
+        }catch (NullPointerException e){
+            document = newScrapId;
+        }
+
+        db.collection("scrapsPost").document(document)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -260,7 +298,7 @@ public class ViewPostActivity extends AppCompatActivity {
         Toast.makeText(this,msg, Toast.LENGTH_SHORT).show();
     }
 
-    @Override //삭제메뉴구현
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater menuInflater = getMenuInflater();
@@ -268,28 +306,109 @@ public class ViewPostActivity extends AppCompatActivity {
         return true;
     }
 
-    //삭제기능
-    public boolean onOptionsItemSelected(@NonNull MenuItem item, int position) {
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
 
-        if (item.getItemId() == R.id.delete) {
-            System.out.println("clickeddddd");
-            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            firebaseFirestore.collection("posts").document(writeinfo.getPostid())
+        switch(item.getItemId()) {
+            case R.id.delete:
+                builder = new AlertDialog.Builder(ViewPostActivity.this);
+                dialog = builder.setMessage("작성한 팀원 모집글을 삭제합니다")
+                        .setNegativeButton("CANCEL", null)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                postDeleteFunc();
+                            }
+                        })
+                        .create();
+                dialog.show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void postDeleteFunc(){
+
+        db.collection("posts").document(writeinfo.getPostid())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startToast("게시글을 삭제하였습니다");
+                        relatedPostDbCheck();
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        startToast("게시글을 삭제하지 못하였습니다.");
+                    }
+                });
+    }
+
+    private void relatedPostDbCheck(){
+
+        commentId = new ArrayList<>();
+        scrapId = new ArrayList<>();
+
+        db.collection("comments")
+                .whereEqualTo("postid", writeinfo.getPostid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                commentId.add(document.getId());
+                            }
+                            deleteRelated(commentId, "comments");
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        db.collection("scrapsPost")
+                .whereEqualTo("postId", writeinfo.getPostid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                scrapId.add(document.getId());
+                            }
+                            deleteRelated(scrapId, "scrapsPost");
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void deleteRelated(final ArrayList<String> list, final String collection){
+
+        for(String id : list){
+            db.collection(collection).document(id)
                     .delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(activity, "게시글을 삭제하였습니다", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(activity, "게시글을 삭제하지 못하였습니다.", Toast.LENGTH_SHORT).show();
+                            Log.w(TAG, "Error deleting document", e);
                         }
                     });
-            return true;
         }
-        return false;
     }
+
+
 }

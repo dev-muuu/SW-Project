@@ -108,7 +108,6 @@ public class AllRecyclerAdapter extends RecyclerView.Adapter<AllRecyclerAdapter.
         private void checkContestInDB() {
 
             dbExist = false;
-//            contestDetail = new ContestInfo();
 
             db.collection("contests")
                     .whereEqualTo("contestName", data.getTitle())
@@ -147,6 +146,7 @@ public class AllRecyclerAdapter extends RecyclerView.Adapter<AllRecyclerAdapter.
             contestDetail.setContestName(data.getTitle());
             contestDetail.setDetailUrl(data.getAlbumID());
             contestDetail.setImageUrl(data.getImageUrl());
+            contestDetail.setInOut("교외");
 //            contestDetail.setScrapNum(0);
 
             db.collection("contests").add(contestDetail)

@@ -47,7 +47,8 @@
         </activity>
         <activity android:name=".Activity.PopUpActivity"
             android:theme="@android:style/Theme.Dialog" />
-
+        <activity android:name=".Activity.ViewPost_Practice">
+        </activity>
 
     </application>
 

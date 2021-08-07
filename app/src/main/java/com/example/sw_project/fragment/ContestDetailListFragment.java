@@ -1,5 +1,6 @@
 package com.example.sw_project.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +11,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw_project.Activity.PostingActivity;
+import com.example.sw_project.Activity.SignUpActivity;
+import com.example.sw_project.Activity.ViewPostActivity;
 import com.example.sw_project.ContestInfo;
 import com.example.sw_project.ParticipateInfo;
 import com.example.sw_project.R;
@@ -40,12 +44,15 @@ import java.util.HashMap;
 
 public class ContestDetailListFragment extends Fragment {
 
-    View view;
-    private FirebaseFirestore db;
+    public View view;
+    public FirebaseFirestore db;
     private FirebaseUser user;
     private String TAG = "ContestDetailListFragment";
-    private ContestInfo contestInfo;
+    public ContestInfo contestInfo;
     private StudentInfo info;
+    private boolean alreadyPost;
+    private AlertDialog dialog;
+    private AlertDialog.Builder builder;
 
     @Nullable
     @Override
@@ -82,6 +89,16 @@ public class ContestDetailListFragment extends Fragment {
                     }
                 });
 
+        getContestPost();
+
+        return view;
+    }
+
+    public void getContestPost(){
+
+        //초기화
+        alreadyPost = false;
+
         db.collection("posts")
                 .whereEqualTo("contestId",contestInfo.getContestId())
                 .get()
@@ -90,11 +107,20 @@ public class ContestDetailListFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                         if (task.isSuccessful()) {
+
                             final ArrayList<WriteInfo> arrayList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 arrayList.add(document.toObject(WriteInfo.class));
+                                if(document.getData().get("userUid").toString().equals(user.getUid()))
+                                    alreadyPost = true;
                             }
+
+                            if(arrayList.size() == 0)
+                                view.findViewById(R.id.isPostZeroText).setVisibility(View.VISIBLE);
+                            else
+                                view.findViewById(R.id.isPostZeroText).setVisibility(View.INVISIBLE);
+
                             RecyclerView recyclerView = view.findViewById(R.id.postlistRecycle);
                             recyclerView.setHasFixedSize(true);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -106,9 +132,6 @@ public class ContestDetailListFragment extends Fragment {
                         }
                     }
                 });
-
-
-        return view;
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() { //버튼 클릭시
@@ -116,16 +139,40 @@ public class ContestDetailListFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.movePostingButton:
-                    Intent intent = new Intent(getActivity(), PostingActivity.class);
-                    intent.putExtra("contestDetail", contestInfo);
-                    getActivity().startActivity(intent);
+                    checkAndMovePosting();
                     break;
                 case R.id.alreadyPartiButton:
-                    participateContest();
+                    builder = new AlertDialog.Builder(getContext());
+                    dialog = builder.setMessage("해당 공모전에 참여하셨습니다.\n\n* 참여 여부는 수정이 불가능합니다")
+                            .setNegativeButton("NO", null)
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    participateContest();
+                                }
+                            })
+                            .create();
+                    dialog.show();
                     break;
             }
         }
     };
+
+    private void checkAndMovePosting(){
+
+        if(alreadyPost) {
+            builder = new AlertDialog.Builder(getContext());
+            dialog = builder.setMessage("이미 팀원 모집글을 작성했습니다.\n\n새로운 모집글 작성을 원할 경우 기존 모집글을 삭제해주세요.")
+                    .setNegativeButton("확인", null)
+                    .create();
+            dialog.show();
+        } else{
+            Intent intent = new Intent(getActivity(), PostingActivity.class);
+            intent.putExtra("contestDetail", contestInfo);
+            getActivity().startActivity(intent);
+        }
+
+    }
 
     private void participateContest(){
 
@@ -158,14 +205,13 @@ public class ContestDetailListFragment extends Fragment {
 
                 int newParticipateNum = Integer.parseInt(snapshot.getString("contestParticipate")) + 1;
                 transaction.update(sfDocRef, "contestParticipate", String.valueOf(newParticipateNum));
-
+                updateStatisticsDB();
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "Transaction success!");
-                updateStatisticsDB();
                 startToast("해당 공모전을 참여했습니다.");
                 view.findViewById(R.id.alreadyPartiButton).setEnabled(false);
             }
@@ -204,9 +250,9 @@ public class ContestDetailListFragment extends Fragment {
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "Transaction success!");
             }
-        }).addOnFailureListener(new OnFailureListener() {
+        }).addOnFailureListener(new OnFailureListener(){
             @Override
-            public void onFailure(@NonNull Exception e) {
+            public void onFailure(@NonNull Exception e){
                 Log.w(TAG, "Transaction failure.", e);
             }
         });

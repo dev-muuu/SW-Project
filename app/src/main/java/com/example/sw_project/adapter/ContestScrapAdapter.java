@@ -29,7 +29,6 @@ public class ContestScrapAdapter extends RecyclerView.Adapter<ContestScrapAdapte
 
         public ViewHolder(CardView view) {
             super(view);
-            // Define click listener for the ViewHolder's View
             cardView = view;
         }
     }
@@ -66,12 +65,23 @@ public class ContestScrapAdapter extends RecyclerView.Adapter<ContestScrapAdapte
         ImageView img_chart = viewHolder.cardView.findViewById(R.id.contestImageView);
 
         int[] storage = new int[3];
-        StringTokenizer stk = new StringTokenizer(mDataset.get(position).getEndDate(),"-");
-        for(int i = 0; stk.hasMoreTokens(); i++)
-            storage[i] = Integer.parseInt(stk.nextToken());
+        String startOrEndDateText;
+        StringTokenizer stk;
+        if(mDataset.get(position).getInOut().equals("교내")) {
 
-        String endDateText = String.format("%d년 %d월 %d일 까지",storage[0]+2000,storage[1],storage[2]);
-        contestEndLineText.setText(endDateText);
+            stk = new StringTokenizer(mDataset.get(position).getStartDate(), ".");
+            for (int i = 0; stk.hasMoreTokens(); i++)
+                storage[i] = Integer.parseInt(stk.nextToken());
+            startOrEndDateText = String.format("%d년 %d월 %d일부터 ~", storage[0], storage[1], storage[2]);
+
+        }else{
+            stk = new StringTokenizer(mDataset.get(position).getEndDate(), "-");
+            for (int i = 0; stk.hasMoreTokens(); i++)
+                storage[i] = Integer.parseInt(stk.nextToken());
+            startOrEndDateText = String.format("~ %d년 %d월 %d일까지", storage[0] + 2000, storage[1], storage[2]);
+        }
+
+        contestEndLineText.setText(startOrEndDateText);
         contestNameText.setText(mDataset.get(position).getContestName());
         Glide.with(viewHolder.cardView.getContext()).load(mDataset.get(position).getImageUrl()).into(img_chart);
 

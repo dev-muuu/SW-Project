@@ -25,6 +25,8 @@ public class WriteInfo implements Serializable { //인텐드로 class보내기�
     public WriteInfo(){
     }
 
+
+
     public String getContestId() {
         return contestId;
     }

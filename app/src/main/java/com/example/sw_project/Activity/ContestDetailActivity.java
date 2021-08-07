@@ -68,7 +68,6 @@ public class ContestDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        Bundle extras = getIntent().getExtras();
         Intent intent = getIntent();// 인텐트 받아오기
         contestInfo = (ContestInfo) intent.getSerializableExtra("contestDetail");
 
@@ -149,9 +148,13 @@ public class ContestDetailActivity extends AppCompatActivity {
     private void moveWebPage(){
         //앨범 번호
         String contestUrl = contestInfo.getDetailUrl();
+        String detail_url;
 
         //앨범 디테일 주소 melon_detail_url + albumID
-        String detail_url = "https://www.jungle.co.kr/contest";
+        if(contestInfo.getInOut().equals("교내"))
+            detail_url = "https://www.sungshin.ac.kr/bbs/";
+        else
+            detail_url = "https://www.jungle.co.kr/contest";
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(detail_url + contestUrl));
         this.startActivities(new Intent[]{intent});
@@ -229,7 +232,6 @@ public class ContestDetailActivity extends AppCompatActivity {
                                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                         userDepartment = document.getData().get("department").toString();
                                         userStudentId = document.getData().get("studentId").toString();
-
                                         statisticsUpdate();
                                     } else {
                                         Log.d(TAG, "No such document");
@@ -401,6 +403,16 @@ public class ContestDetailActivity extends AppCompatActivity {
                         Log.w(TAG, "Transaction failure.", e);
                     }
                 });
+    }
+
+    @Override
+    protected void onRestart() {
+
+        super.onRestart();
+
+        ContestDetailListFragment mf = (ContestDetailListFragment) adapter.getItem(0);
+        mf.getContestPost();
+
     }
 
     private void startToast(String msg){
