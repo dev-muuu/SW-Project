@@ -55,7 +55,7 @@
                 android:text="팀원 모집중" />
 
             <TextView
-                android:id="@+id/postDateView"
+                android:id="@+id/postWriterText"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_margin="5dp"

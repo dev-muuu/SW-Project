@@ -46,7 +46,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.postVi
                 Intent intent = new Intent(activity, ViewPostActivity.class);
                 intent.putExtra("writeInfo", arrayList.get(holder.getAdapterPosition()));
                 activity.startActivity(intent);
-
             }
         });
         return holder;
@@ -114,7 +113,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.postVi
             super(itemView);
             this.poster = itemView.findViewById(R.id.poster);
             this.title = itemView.findViewById(R.id.titleView);
-            this.date = itemView.findViewById(R.id.postDateView);
+            this.date = itemView.findViewById(R.id.postWriterText);
             this.scrapNum = itemView.findViewById(R.id.scrapNumView);
             this.stillRecruit = itemView.findViewById(R.id.stillRecruitText);
         }}

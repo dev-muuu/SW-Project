@@ -18,15 +18,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
 import com.example.sw_project.ScrapInfo;
+import com.example.sw_project.StudentInfo;
 import com.example.sw_project.WriteInfo;
+import com.example.sw_project.adapter.FragmentAdapter;
+import com.example.sw_project.fragment.ContestDetailListFragment;
+import com.example.sw_project.fragment.ContestStatisticsFragment;
+import com.example.sw_project.fragment.PostCommentFragment;
+import com.example.sw_project.fragment.PostDetailFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -43,9 +51,16 @@ import java.util.Date;
 
 public class ViewPostActivity extends AppCompatActivity {
 
+    private TabLayout tabLayout;
+    private ViewPager detailViewPager;
+    private PostDetailFragment fragment1;
+    private PostCommentFragment fragment2;
+    private FragmentAdapter adapter;
+
     private TextView titleView,writerView,dateView,regionView,wantnumView,wantdepView,etcView;
     private Activity activity;
     private WriteInfo writeinfo;
+    private StudentInfo studentInfo;
     private ScrapInfo alreadyScrap;
     private String newScrapId;
     private FirebaseUser user;
@@ -60,64 +75,112 @@ public class ViewPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_post);
+        setContentView(R.layout.activity_view_post_main);
 
-        scrapButton = findViewById(R.id.scrapButton);
-        scrapButton.setOnClickListener(onClickListener);
-        scrapCancelButton = findViewById(R.id.scrapCancelButton);
-        scrapCancelButton.setOnClickListener(onClickListener);
-        finishRecruitButton = findViewById(R.id.finishRecruitButton);
-        finishRecruitButton.setOnClickListener(onClickListener);
-        findViewById(R.id.moveContestPageButton).setOnClickListener(onClickListener);
+//        scrapButton = findViewById(R.id.scrapButton);
+//        scrapButton.setOnClickListener(onClickListener);
+//        scrapCancelButton = findViewById(R.id.scrapCancelButton);
+//        scrapCancelButton.setOnClickListener(onClickListener);
+//        finishRecruitButton = findViewById(R.id.finishRecruitButton);
+//        finishRecruitButton.setOnClickListener(onClickListener);
+//        findViewById(R.id.moveContestPageButton).setOnClickListener(onClickListener);
 
         Intent intent = getIntent();// 인텐트 받아오기
         writeinfo = (WriteInfo) intent.getSerializableExtra("writeInfo");
+
+        ////////
+        tabLayout = findViewById(R.id.viewPostTab);
+        detailViewPager = findViewById(R.id.postDetailPager);
+
+        //getFragmentManager을 getSupportFragmentManager대신 사용
+        adapter = new FragmentAdapter(getSupportFragmentManager(),1);
+
+        fragment1 = new PostDetailFragment();
+        fragment2 = new PostCommentFragment();
+
+        adapter.addFragment(fragment1);
+        adapter.addFragment(fragment2);
+
+        detailViewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(detailViewPager);
+        tabLayout.getTabAt(0).setText("모집글");
+        tabLayout.getTabAt(1).setText("댓글");
+
+        //contest 정보 Fragment에도 전달하기
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("writeInfo",writeinfo);
+        fragment1.setArguments(bundle);
+        fragment2.setArguments(bundle);
+
+        System.out.println("first");
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
         ActionBar actionBar = getSupportActionBar();
-        if (writeinfo.getUserUid().equals(user.getUid())) {
+        if (writeinfo.getUserUid().equals(user.getUid()))
             actionBar.setTitle("");
-            scrapButton.setVisibility(View.INVISIBLE);
-            finishRecruitButton.setVisibility(View.VISIBLE);
-            // 모집완료 버튼 추가
-            if (writeinfo.getIsFinishRecruit())
-                finishRecruitButton.setEnabled(false);
-        } else
+        else
             actionBar.hide();
 
-        titleView = findViewById(R.id.titleView);
-        writerView =findViewById(R.id.postDateView);
-        dateView = findViewById(R.id.dateView);
-        regionView = findViewById(R.id.regionView);
-        wantnumView = findViewById(R.id.wantnumView);
-        wantdepView = findViewById(R.id.wantdepView);
-        etcView =findViewById(R.id.etcView);
-        meet = findViewById(R.id.meetCheckBox);
-        zoom = findViewById(R.id.zoomCheckBox);
+//        titleView = findViewById(R.id.titleView);
+//        writerView =findViewById(R.id.postWriterText);
+//        dateView = findViewById(R.id.dateView);
+//        regionView = findViewById(R.id.regionView);
+//        wantnumView = findViewById(R.id.wantnumView);
+//        wantdepView = findViewById(R.id.wantdepView);
+//        etcView =findViewById(R.id.etcView);
+//        meet = findViewById(R.id.meetCheckBox);
+//        zoom = findViewById(R.id.zoomCheckBox);
 
-        postDataShow();
 
-        db.collection("scrapsPost")
-                .whereEqualTo("postId", writeinfo.getPostid())
-                .whereEqualTo("scrapUserUid", user.getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                alreadyScrap = document.toObject(ScrapInfo.class);
-                                scrapButton.setVisibility(View.INVISIBLE);
-                                scrapCancelButton.setVisibility(View.VISIBLE);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+
+
+
+
+
+
+//        postDataShow();
+//
+//        db.collection("scrapsPost")
+//                .whereEqualTo("postId", writeinfo.getPostid())
+//                .whereEqualTo("scrapUserUid", user.getUid())
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                                alreadyScrap = document.toObject(ScrapInfo.class);
+//                                scrapButton.setVisibility(View.INVISIBLE);
+//                                scrapCancelButton.setVisibility(View.VISIBLE);
+//                            }
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+//
+//        writerView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DocumentReference docRef = db.collection("users").document(writeinfo.getUserUid());
+//                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        studentInfo = documentSnapshot.toObject(StudentInfo.class);
+//                        Intent intent = new Intent(getApplicationContext(), WriterPopUpActivity.class);
+//
+//                        intent.putExtra("data", studentInfo.getStudentId());
+//                        intent.putExtra("data2", studentInfo.getCollege());
+//                        intent.putExtra("data3", studentInfo.getDepartment());
+//                        intent.putExtra("data4", studentInfo.getContestParticipate());
+//                        startActivity(intent);
+//                    }
+//                });
+//            }
+//        });
 
     }
 

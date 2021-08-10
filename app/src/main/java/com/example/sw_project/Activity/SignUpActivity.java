@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -45,8 +46,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     private ArrayAdapter collegeadapter;
     private Spinner collegespinner;
-    private ArrayAdapter majoradapter;
-    private Spinner majorspinner;
+    private ArrayAdapter liberalmajoradapter, socialmajoradapter, engineeringmajoradapter, artsmajoradapter;
+    private Spinner liberalmajorspinner, socialmajorspinner, engineeringmajorspinner, artsmajorspinner;
     private String certification;
     private AlertDialog dialog;
 
@@ -73,10 +74,34 @@ public class SignUpActivity extends AppCompatActivity {
         collegeadapter = ArrayAdapter.createFromResource(this, R.array.college, android.R.layout.simple_spinner_dropdown_item);
         collegespinner.setAdapter(collegeadapter);
 
-        // 학과 스크롤
-        majorspinner = (Spinner) findViewById(R.id.majorSpinner);
-        majoradapter = ArrayAdapter.createFromResource(this, R.array.major, android.R.layout.simple_spinner_dropdown_item);
-        majorspinner.setAdapter(majoradapter);
+        // 단과대별 학과 필터링
+        collegespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (collegeadapter.getItem(position).equals("인문대학")) {
+                    liberalmajorspinner = (Spinner) findViewById(R.id.majorSpinner);
+                    liberalmajoradapter = ArrayAdapter.createFromResource(SignUpActivity.this, R.array.liberalmajor, android.R.layout.simple_spinner_dropdown_item);
+                    liberalmajorspinner.setAdapter(liberalmajoradapter);
+                } else if (collegeadapter.getItem(position).equals("사회대학")) {
+                    socialmajorspinner = (Spinner) findViewById(R.id.majorSpinner);
+                    socialmajoradapter = ArrayAdapter.createFromResource(SignUpActivity.this, R.array.socialmajor, android.R.layout.simple_spinner_dropdown_item);
+                    socialmajorspinner.setAdapter(socialmajoradapter);
+                } else if (collegeadapter.getItem(position).equals("공과대학")) {
+                    engineeringmajorspinner = (Spinner) findViewById(R.id.majorSpinner);
+                    engineeringmajoradapter = ArrayAdapter.createFromResource(SignUpActivity.this, R.array.engineeringmajor, android.R.layout.simple_spinner_dropdown_item);
+                    engineeringmajorspinner.setAdapter(engineeringmajoradapter);
+                } else if (collegeadapter.getItem(position).equals("예체능대학")) {
+                    artsmajorspinner = (Spinner) findViewById(R.id.majorSpinner);
+                    artsmajoradapter = ArrayAdapter.createFromResource(SignUpActivity.this, R.array.artsmajor, android.R.layout.simple_spinner_dropdown_item);
+                    artsmajorspinner.setAdapter(artsmajoradapter);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         canEmailUseText = (EditText)findViewById(R.id.canEmailUseText);
         emailCertificationText = (EditText)findViewById(R.id.emailCertificationText);

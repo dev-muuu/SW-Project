@@ -47,10 +47,12 @@
         </activity>
         <activity android:name=".Activity.FragMainActivity">
         </activity>
+        <activity android:name=".ViewPostActivity_check">
+        </activity>
+        <activity android:name=".Activity.WriterPopUpActivity"
+            android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".Activity.PopUpActivity"
             android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".Activity.ViewPost_Practice">
-        </activity>
 
     </application>
 
