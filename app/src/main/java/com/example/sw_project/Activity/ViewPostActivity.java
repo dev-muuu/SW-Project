@@ -51,7 +51,7 @@ public class ViewPostActivity extends AppCompatActivity {
     private FirebaseUser user;
     private String TAG = "ScrapActivity";
     private FirebaseFirestore db;
-    private Button scrapButton, scrapCancelButton;
+    private Button scrapButton, scrapCancelButton, finishRecruitButton;
     private ArrayList<String> commentId, scrapId;
     private AlertDialog dialog;
     private AlertDialog.Builder builder;
@@ -65,6 +65,8 @@ public class ViewPostActivity extends AppCompatActivity {
         scrapButton.setOnClickListener(onClickListener);
         scrapCancelButton = findViewById(R.id.scrapCancelButton);
         scrapCancelButton.setOnClickListener(onClickListener);
+        finishRecruitButton = findViewById(R.id.finishRecruitButton);
+        finishRecruitButton.setOnClickListener(onClickListener);
         findViewById(R.id.moveContestPageButton).setOnClickListener(onClickListener);
 
         Intent intent = getIntent();// 인텐트 받아오기
@@ -74,20 +76,27 @@ public class ViewPostActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         ActionBar actionBar = getSupportActionBar();
-        if(writeinfo.getUserUid().equals(user.getUid()))
+
+        if (writeinfo.getUserUid().equals(user.getUid())) {
             actionBar.setTitle("");
-        else
+            scrapButton.setVisibility(View.INVISIBLE);
+            finishRecruitButton.setVisibility(View.VISIBLE);
+            // 모집완료 버튼 추가
+            if (writeinfo.getIsFinishRecruit())
+                finishRecruitButton.setEnabled(false);
+        } else
             actionBar.hide();
 
-//        titleView =findViewById(R.id.titleView);
-//        titleView.setText(extras.getString("title"));
+        titleView = findViewById(R.id.titleView);
+        titleView.setText(writeinfo.getTitle());
 
-        writerView =findViewById(R.id.writerView);
+        writerView =findViewById(R.id.postDateView);
         String writerText = String.format("글쓴이: %s",writeinfo.getWriterName());
         writerView.setText(writerText);
 
         dateView = findViewById(R.id.dateView);
-        SimpleDateFormat sdf = new SimpleDateFormat("작성일: yy.MM.dd");
+//        SimpleDateFormat sdf = new SimpleDateFormat("작성일: yy.MM.dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("20yy년 M월 d일 작성");
         String dateText = sdf.format(new Date(writeinfo.getCreatedAt()));
         dateView.setText(dateText);
 
@@ -111,9 +120,6 @@ public class ViewPostActivity extends AppCompatActivity {
         //색상 등 수정 필요......
         meet.setEnabled(false);
         zoom.setEnabled(false);
-
-        scrapCancelButton.setVisibility(View.INVISIBLE);
-        scrapButton.setVisibility(View.VISIBLE);
 
         db.collection("scrapsPost")
                 .whereEqualTo("postId", writeinfo.getPostid())
@@ -147,12 +153,46 @@ public class ViewPostActivity extends AppCompatActivity {
                 case R.id.scrapCancelButton:
                     scrapDbDelete();
                     break;
+                case R.id.finishRecruitButton:
+                    builder = new AlertDialog.Builder(ViewPostActivity.this);
+                    dialog = builder.setMessage("팀원 모집을 마감합니다")
+                            .setNegativeButton("NO", null)
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finishRecruit();
+                                }
+                            })
+                            .create();
+                    dialog.show();
+                    break;
+
                 case R.id.moveContestPageButton:
                     moveContestActivity();
                     break;
             }
         }
     };
+
+    private void finishRecruit(){
+
+        DocumentReference washingtonRef = db.collection("posts").document(writeinfo.getPostid());
+        washingtonRef
+                .update("isFinishRecruit", true)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        finishRecruitButton.setEnabled(false);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
 
     private void moveContestActivity(){
 
@@ -322,6 +362,12 @@ public class ViewPostActivity extends AppCompatActivity {
                         })
                         .create();
                 dialog.show();
+                break;
+            case R.id.edit:
+                //posting 이동(writeInfo랑 같이)
+                Intent intent = new Intent(this, PostingActivity.class);
+                intent.putExtra("writeInfo",writeinfo);
+                startActivity(intent);
                 break;
         }
 

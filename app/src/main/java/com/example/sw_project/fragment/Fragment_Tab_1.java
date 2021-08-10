@@ -1,15 +1,12 @@
 package com.example.sw_project.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,36 +14,33 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw_project.Activity.ContestScrapActivity;
+import com.example.sw_project.Activity.MainActivity;
+import com.example.sw_project.Activity.MyPostActivity;
 import com.example.sw_project.R;
 import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.PostListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Collections;
 
 public class Fragment_Tab_1 extends Fragment {
 
     View view;
     private Activity activity;
     private final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-//    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user;
     public String TAG = "activity_postlist";
     public FirebaseFirestore db;
     private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
 
     @Nullable
     @Override
@@ -55,24 +49,38 @@ public class Fragment_Tab_1 extends Fragment {
 
         view = inflater.inflate(R.layout.activity_postlist, container, false);
         db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         recyclerView = view.findViewById(R.id.recyclerview);
+        view.findViewById(R.id.moveMyPostButton).setOnClickListener(onClickListener);
 
         listDbGet();
 
         return view;
     }
 
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.moveMyPostButton:
+                    ((MainActivity)getActivity()).replaceFragment(MyPostActivity.newInstance(), "MyPostActivity");
+                    break;
+            }
+        }
+    };
+
     public void init(){
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        RecyclerView.Adapter madapter = new PostListAdapter(new ArrayList<WriteInfo>(), getActivity());
-        recyclerView.setAdapter(madapter);
+        mAdapter = new PostListAdapter(new ArrayList<WriteInfo>(), getActivity());
+        recyclerView.setAdapter(mAdapter);
     }
 
     public void listDbGet(){
 
         init();
+
         db.collection("posts")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -85,10 +93,11 @@ public class Fragment_Tab_1 extends Fragment {
 //                                Log.d(TAG, document.getId() + " => " + document.getData());
                                 arrayList.add(document.toObject(WriteInfo.class));
                             }
+                            Collections.sort(arrayList);
                             recyclerView.setHasFixedSize(true);
                             recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-                            RecyclerView.Adapter madapter = new PostListAdapter(arrayList, getActivity());
-                            recyclerView.setAdapter(madapter);
+                            mAdapter = new PostListAdapter(arrayList, getActivity());
+                            recyclerView.setAdapter(mAdapter);
                         } else {
                             Log.w(TAG, "Error => ", task.getException());
                         }

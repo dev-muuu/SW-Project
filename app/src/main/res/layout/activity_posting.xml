@@ -1,172 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ViewPost"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/contentsLayout"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:id="@+id/contentsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textTitle"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="모집글 제목" />
+
+                <EditText
+                    android:id="@+id/postTitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="Region"
+                    android:ems="10"
+                    android:hint="ex.공모전 팀원 모집합니다"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/meetWayText"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/meetway" />
+
+                <CheckBox
+                    android:id="@+id/zoom"
+                    android:layout_width="44dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+
+                    android:text="@string/zoom" />
+
+                <CheckBox
+                    android:id="@+id/meet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:text="@string/meet" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/regionText"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/scope" />
+
+                <EditText
+                    android:id="@+id/writeRegionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="Region"
+                    android:ems="10"
+                    android:hint="@string/ex"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/wantNumText"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:gravity="center"
+                    android:text="@string/peoplecount" />
+
+                <EditText
+                    android:id="@+id/writeWantNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/exnum"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/deptText"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:gravity="center"
+                    android:text="@string/wantdep" />
+
+                <EditText
+                    android:id="@+id/writeDeptText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/writedep"
+                    android:importantForAutofill="no"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/etcText"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/etc" />
+
+
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/writeEtc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/contents"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:lines="15"
+                android:padding="10dp" />
+
+        </LinearLayout>
+
+        <!--    <include-->
+        <!--        layout="@layout/view_loading"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:visibility="gone"/>-->
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/meetWayText"
-                android:layout_width="36dp"
-                android:layout_height="59dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/meetway" />
-
-            <CheckBox
-                android:id="@+id/zoom"
-                android:layout_width="44dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="false"
-
-                android:text="@string/zoom" />
-
-            <CheckBox
-                android:id="@+id/meet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:text="@string/meet" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="59dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/regionText"
-                android:layout_width="125dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:gravity="center"
-                android:text="@string/scope" />
-
-            <EditText
-                android:id="@+id/writeRegionText"
-                android:layout_width="286dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:autofillHints="Region"
-                android:ems="10"
-                android:hint="@string/ex"
-                android:inputType="textPersonName" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/wantNumText"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/peoplecount" />
-
-            <EditText
-                android:id="@+id/writeWantNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="@string/exnum"
-                android:importantForAutofill="no"
-                android:inputType="number" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/deptText"
-                android:layout_width="52dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/wantdep" />
-
-            <EditText
-                android:id="@+id/writeDeptText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="@string/writedep"
-                android:importantForAutofill="no"
-                android:inputType="textPersonName" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/etcText"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/etc" />
-
-
-        </LinearLayout>
-
-
-        <EditText
-            android:id="@+id/writeEtc"
-            android:layout_width="match_parent"
-            android:layout_height="189dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="@string/contents"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            android:lines="15"
-            android:padding="10dp" />
+        android:layout_gravity="bottom" >
 
         <Button
             android:id="@+id/upLoadButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_margin="10dp"
             android:onClick="CheckBtn"
-            android:text="@string/check"
-            app:backgroundTint="#CB86D6" />
+            android:text="@string/check" />
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-    </LinearLayout>
-
-<!--    <include-->
-<!--        layout="@layout/view_loading"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:visibility="gone"/>-->
-
-
-
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,9 +1,9 @@
 package com.example.sw_project;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 
-public class WriteInfo implements Serializable { //인텐드로 class보내기위해 Serializable implement
-
+public class WriteInfo implements Serializable, Comparable<WriteInfo> {
 
     private String title;
     private String wantEtc; //기타란
@@ -21,11 +21,30 @@ public class WriteInfo implements Serializable { //인텐드로 class보내기�
 
     private boolean zoomCheck;
     private boolean meetCheck;
+    private boolean isFinishRecruit;
 
-    public WriteInfo(){
+    @Override
+    public int compareTo(WriteInfo writeInfo) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd.HH.mm.ss");
+
+        String a = simpleDateFormat.format(writeInfo.getCreatedAt());
+        String b = simpleDateFormat.format(createdAt);
+        if(a.compareTo(b) > 0){
+            return 1;
+        }else if(a.compareTo(b) < 0){
+            return -1;
+        }else{
+            return 0;
+        }
     }
 
+    public boolean getIsFinishRecruit() {
+        return isFinishRecruit;
+    }
 
+    public void setFinishRecruit(boolean finishRecruit) {
+        isFinishRecruit = finishRecruit;
+    }
 
     public String getContestId() {
         return contestId;

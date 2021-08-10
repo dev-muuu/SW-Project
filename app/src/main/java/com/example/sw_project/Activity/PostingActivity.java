@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ public class PostingActivity extends AppCompatActivity {
     private FirebaseUser user;
     public FirebaseFirestore db;
     private ContestInfo contestInfo;
+    private WriteInfo writeEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,13 @@ public class PostingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();// 인텐트 받아오기
         contestInfo = (ContestInfo) intent.getSerializableExtra("contestDetail");
+        writeEdit = (WriteInfo) intent.getSerializableExtra("writeInfo");
+
+        try{
+            postEditPrepare();
+        }catch (NullPointerException e){
+        }
+
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() { //버튼 클릭시
@@ -64,6 +73,18 @@ public class PostingActivity extends AppCompatActivity {
         }
     };
 
+    private void postEditPrepare(){
+
+        TextView wantEtc = findViewById(R.id.writeEtc);
+        wantEtc.setText(writeEdit.getWantEtc());
+        TextView regionScope = findViewById(R.id.writeRegionText);
+        TextView wantNum = findViewById(R.id.writeWantNum);
+        TextView wantDept = findViewById(R.id.writeDeptText);
+        TextView title = findViewById(R.id.postTitleText);
+
+
+    }
+
     private void postInfoUpdate() {
 
         WriteInfo writeInfo = new WriteInfo();
@@ -72,7 +93,7 @@ public class PostingActivity extends AppCompatActivity {
         final String regionScope = ((EditText) findViewById(R.id.writeRegionText)).getText().toString();   //선호 지역
         final String wantNum = ((EditText)findViewById(R.id.writeWantNum)).getText().toString();  //모집인원
         final String wantDept = ((EditText)findViewById(R.id.writeDeptText)).getText().toString(); //선호학과
-        final String title = "";
+        final String title = ((EditText)findViewById(R.id.postTitleText)).getText().toString();
 
         writeInfo.setCreatedAt(System.currentTimeMillis());
         writeInfo.setRegionScope(regionScope);
@@ -84,6 +105,7 @@ public class PostingActivity extends AppCompatActivity {
         writeInfo.setWantNum(wantNum);
         writeInfo.setImgUrl(contestInfo.getImageUrl());
         writeInfo.setContestId(contestInfo.getContestId());
+        writeInfo.setFinishRecruit(false);
 
         //checkBox 선택 여부 처리
         CheckBox zoomCheck = findViewById(R.id.zoom);

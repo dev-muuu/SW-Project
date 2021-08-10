@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -53,6 +54,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
         TextView alarmKindText = viewHolder.cardView.findViewById(R.id.alarmKindText);
         TextView alarmMessageText = viewHolder.cardView.findViewById(R.id.alarmMessageText);
         TextView alarmTimeText = viewHolder.cardView.findViewById(R.id.alarmTimeText);
+        LinearLayout layout = viewHolder.cardView.findViewById(R.id.alarmCardLayout);
 
         AlarmInfo alarmTextDeco = mDataset.get(position);
 
@@ -72,6 +74,9 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
         }else if(currentDiffer / (1000 * 60 * 60) < 24){
             //시단위
             calcuratedTime = String.format("%d시간 전",currentDiffer / (1000 * 60 * 60));
+        }else if(currentDiffer / (1000 * 60 * 60 * 24) < 7){
+            //일단위
+            calcuratedTime = String.format("%d일 전",currentDiffer / (1000 * 60 * 60 * 24));
         }else{
             //이외에는 날짜
             SimpleDateFormat timeFormat = new SimpleDateFormat("M월 d일");
@@ -91,7 +96,8 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
 
         if(mDataset.get(position).getIsRead()){
             // #7CA6A1A1 로 배경 변경
-            viewHolder.cardView.setCardBackgroundColor(Color.parseColor("#7CA6A1A1"));
+//            viewHolder.cardView.setCardBackgroundColor(Color.parseColor("#7CA6A1A1"));
+            layout.setBackgroundColor(Color.parseColor("#7CA6A1A1"));
         }
 
     }

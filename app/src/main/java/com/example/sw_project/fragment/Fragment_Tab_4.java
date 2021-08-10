@@ -24,6 +24,8 @@ import com.example.sw_project.Activity.AlarmSettingActivity;
 import com.example.sw_project.Activity.ContestDetailActivity;
 import com.example.sw_project.Activity.ContestScrapActivity;
 import com.example.sw_project.Activity.MainActivity;
+import com.example.sw_project.Activity.PostingActivity;
+import com.example.sw_project.Activity.ViewPostActivity;
 import com.example.sw_project.AlarmInfo;
 import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
@@ -82,6 +84,8 @@ public class Fragment_Tab_4 extends Fragment {
             @Override
             public void onClick(View view, int position) {
 
+                System.out.println("clllllll.....");
+
                 AlarmInfo alarmDetail = alarmList.get(position);
                 String documentId = alarmDetail.getAlarmDocument();
 
@@ -102,8 +106,8 @@ public class Fragment_Tab_4 extends Fragment {
                                 }
                             });
                 }
-
-                Intent intent = new Intent(getContext(), ContestDetailActivity.class);
+                System.out.println("clllllllllllci");
+                Intent intent = new Intent(getContext(), PostingActivity.class);
 //                intent.putExtra("contestName",detailContest.getContestName());
                 startActivity(intent);
 

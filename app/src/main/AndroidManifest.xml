@@ -43,6 +43,8 @@
         </activity>
         <activity android:name=".Activity.ViewPostActivity">
         </activity>
+        <activity android:name=".Activity.MyPostActivity">
+        </activity>
         <activity android:name=".Activity.FragMainActivity">
         </activity>
         <activity android:name=".Activity.PopUpActivity"
