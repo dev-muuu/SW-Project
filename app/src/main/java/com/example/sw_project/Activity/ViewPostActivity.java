@@ -52,6 +52,7 @@ public class ViewPostActivity extends AppCompatActivity {
     private String TAG = "ScrapActivity";
     private FirebaseFirestore db;
     private Button scrapButton, scrapCancelButton, finishRecruitButton;
+    private CheckBox meet, zoom;
     private ArrayList<String> commentId, scrapId;
     private AlertDialog dialog;
     private AlertDialog.Builder builder;
@@ -76,7 +77,6 @@ public class ViewPostActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         ActionBar actionBar = getSupportActionBar();
-
         if (writeinfo.getUserUid().equals(user.getUid())) {
             actionBar.setTitle("");
             scrapButton.setVisibility(View.INVISIBLE);
@@ -88,38 +88,16 @@ public class ViewPostActivity extends AppCompatActivity {
             actionBar.hide();
 
         titleView = findViewById(R.id.titleView);
-        titleView.setText(writeinfo.getTitle());
-
         writerView =findViewById(R.id.postDateView);
-        String writerText = String.format("글쓴이: %s",writeinfo.getWriterName());
-        writerView.setText(writerText);
-
         dateView = findViewById(R.id.dateView);
-//        SimpleDateFormat sdf = new SimpleDateFormat("작성일: yy.MM.dd");
-        SimpleDateFormat sdf = new SimpleDateFormat("20yy년 M월 d일 작성");
-        String dateText = sdf.format(new Date(writeinfo.getCreatedAt()));
-        dateView.setText(dateText);
-
         regionView = findViewById(R.id.regionView);
-        regionView.setText(writeinfo.getRegionScope());
-
         wantnumView = findViewById(R.id.wantnumView);
-        wantnumView.setText(writeinfo.getWantNum());
-
         wantdepView = findViewById(R.id.wantdepView);
-        wantdepView.setText(writeinfo.getWantDept());
-
         etcView =findViewById(R.id.etcView);
-        etcView.setText(writeinfo.getWantEtc());
+        meet = findViewById(R.id.meetCheckBox);
+        zoom = findViewById(R.id.zoomCheckBox);
 
-        CheckBox meet = findViewById(R.id.meetCheckBox);
-        CheckBox zoom = findViewById(R.id.zoomCheckBox);
-        meet.setChecked(writeinfo.isMeetCheck());
-        zoom.setChecked(writeinfo.isZoomCheck());
-
-        //색상 등 수정 필요......
-        meet.setEnabled(false);
-        zoom.setEnabled(false);
+        postDataShow();
 
         db.collection("scrapsPost")
                 .whereEqualTo("postId", writeinfo.getPostid())
@@ -141,6 +119,29 @@ public class ViewPostActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void postDataShow(){
+
+        titleView.setText(writeinfo.getTitle());
+
+        String writerText = String.format("글쓴이: %s",writeinfo.getWriterName());
+        writerView.setText(writerText);
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("작성일: yy.MM.dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("20yy년 M월 d일 작성");
+        String dateText = sdf.format(new Date(writeinfo.getCreatedAt()));
+        dateView.setText(dateText);
+
+        regionView.setText(writeinfo.getRegionScope());
+        wantnumView.setText(writeinfo.getWantNum());
+        wantdepView.setText(writeinfo.getWantDept());
+        etcView.setText(writeinfo.getWantEtc());
+        meet.setChecked(writeinfo.isMeetCheck());
+        zoom.setChecked(writeinfo.isZoomCheck());
+
+        meet.setEnabled(false);
+        zoom.setEnabled(false);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -456,5 +457,19 @@ public class ViewPostActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
 
+        DocumentReference docRef = db.collection("posts").document(writeinfo.getPostid());
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                writeinfo = documentSnapshot.toObject(WriteInfo.class);
+                postDataShow();
+            }
+        });
+
+
+    }
 }

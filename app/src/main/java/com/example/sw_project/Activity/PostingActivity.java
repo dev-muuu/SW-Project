@@ -35,6 +35,7 @@ public class PostingActivity extends AppCompatActivity {
     public FirebaseFirestore db;
     private ContestInfo contestInfo;
     private WriteInfo writeEdit;
+    private CheckBox zoomCheck, meetCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class PostingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_posting);
 
         findViewById(R.id.upLoadButton).setOnClickListener(onClickListener);
+        findViewById(R.id.editButton).setOnClickListener(onClickListener);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -53,9 +55,15 @@ public class PostingActivity extends AppCompatActivity {
         contestInfo = (ContestInfo) intent.getSerializableExtra("contestDetail");
         writeEdit = (WriteInfo) intent.getSerializableExtra("writeInfo");
 
+        //checkBox 선택 여부 처리
+        zoomCheck = findViewById(R.id.zoom);
+        meetCheck = findViewById(R.id.meet);
+
         try{
             postEditPrepare();
+            findViewById(R.id.editButton).setVisibility(View.VISIBLE);
         }catch (NullPointerException e){
+            findViewById(R.id.upLoadButton).setVisibility(View.VISIBLE);
         }
 
     }
@@ -68,20 +76,65 @@ public class PostingActivity extends AppCompatActivity {
                     //게시글 등록 전 등록에 필요한 정보 추출 함
                     postInfoUpdate();
                     break;
+                case R.id.editButton:
+                    reUpload();
             }
 
         }
     };
 
+    private void reUpload(){
+
+        final String wantEtc = ((EditText) findViewById(R.id.writeEtc)).getText().toString();    //기타
+        final String regionScope = ((EditText) findViewById(R.id.writeRegionText)).getText().toString();   //선호 지역
+        final String wantNum = ((EditText)findViewById(R.id.writeWantNum)).getText().toString();  //모집인원
+        final String wantDept = ((EditText)findViewById(R.id.writeDeptText)).getText().toString(); //선호학과
+        final String title = ((EditText)findViewById(R.id.postTitleText)).getText().toString();
+
+        writeEdit.setRegionScope(regionScope);
+        writeEdit.setTitle(title);
+        writeEdit.setWantDept(wantDept);
+        writeEdit.setWantEtc(wantEtc);
+        writeEdit.setWantNum(wantNum);
+        writeEdit.setZoomCheck(zoomCheck.isChecked());
+        writeEdit.setMeetCheck(meetCheck.isChecked());
+
+        db.collection("posts").document(writeEdit.getPostid())
+                .set(writeEdit)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        finish();;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
     private void postEditPrepare(){
 
         TextView wantEtc = findViewById(R.id.writeEtc);
         wantEtc.setText(writeEdit.getWantEtc());
-        TextView regionScope = findViewById(R.id.writeRegionText);
-        TextView wantNum = findViewById(R.id.writeWantNum);
-        TextView wantDept = findViewById(R.id.writeDeptText);
-        TextView title = findViewById(R.id.postTitleText);
 
+        TextView regionScope = findViewById(R.id.writeRegionText);
+        regionScope.setText(writeEdit.getRegionScope());
+
+        TextView wantNum = findViewById(R.id.writeWantNum);
+        wantNum.setText(writeEdit.getWantNum());
+
+        TextView wantDept = findViewById(R.id.writeDeptText);
+        wantDept.setText(writeEdit.getWantDept());
+
+        TextView title = findViewById(R.id.postTitleText);
+        title.setText(writeEdit.getTitle());
+
+        zoomCheck.setChecked(writeEdit.isZoomCheck());
+        meetCheck.setChecked(writeEdit.isMeetCheck());
 
     }
 
@@ -106,10 +159,6 @@ public class PostingActivity extends AppCompatActivity {
         writeInfo.setImgUrl(contestInfo.getImageUrl());
         writeInfo.setContestId(contestInfo.getContestId());
         writeInfo.setFinishRecruit(false);
-
-        //checkBox 선택 여부 처리
-        CheckBox zoomCheck = findViewById(R.id.zoom);
-        CheckBox meetCheck = findViewById(R.id.meet);
 
         writeInfo.setZoomCheck(zoomCheck.isChecked());
         writeInfo.setMeetCheck(meetCheck.isChecked());
