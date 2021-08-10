@@ -206,7 +206,6 @@ public class PostingActivity extends AppCompatActivity {
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "DocumentSnapshot successfully updated!");
                                         startToast("게시글이 등록되었습니다.");
-                                        postingAlarm(writeInfo);
                                         finish();
                                     }
                                 })
@@ -223,54 +222,6 @@ public class PostingActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
                         startToast("게시글이 등록되지 않았습니다.");
-                    }
-                });
-
-    }
-
-    private void postingAlarm(final WriteInfo writeInfo){
-
-        //임시 message
-        String message = "Hi, This message uses for test";
-
-        AlarmInfo alarmInfo = new AlarmInfo();
-
-        alarmInfo.setDestinationUid("GtXz3dLpDCTz0CyBJCbV6US1HPw1");
-        alarmInfo.setUid(user.getUid());
-        alarmInfo.setUserNickname(writeInfo.getWriterName());
-        alarmInfo.setKind(0);
-        alarmInfo.setTimeStamp(System.currentTimeMillis());
-        alarmInfo.setIsRead(false);
-        alarmInfo.setMessage(message);
-
-        db.collection("alarms").add(alarmInfo)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-
-                        //postId 업데이
-                        DocumentReference washingtonRef = db.collection("alarms").document(documentReference.getId());
-                        washingtonRef
-                                .update("alarmDocument", documentReference.getId())
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error updating document", e);
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
                     }
                 });
 

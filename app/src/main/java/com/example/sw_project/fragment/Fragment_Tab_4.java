@@ -29,6 +29,7 @@ import com.example.sw_project.Activity.ViewPostActivity;
 import com.example.sw_project.AlarmInfo;
 import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
+import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.AlarmListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -84,13 +85,21 @@ public class Fragment_Tab_4 extends Fragment {
             @Override
             public void onClick(View view, int position) {
 
-                System.out.println("clllllll.....");
-
                 AlarmInfo alarmDetail = alarmList.get(position);
-                String documentId = alarmDetail.getAlarmDocument();
+
+                DocumentReference docRef = db.collection("posts").document(alarmDetail.getPostId());
+                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        WriteInfo writeInfo = documentSnapshot.toObject(WriteInfo.class);
+                        Intent intent = new Intent(getContext(), ViewPostActivity.class);
+                        intent.putExtra("writeInfo",writeInfo);
+                        startActivity(intent);
+                    }
+                });
 
                 if(!alarmDetail.getIsRead()){
-                    DocumentReference washingtonRef = db.collection("alarms").document(documentId);
+                    DocumentReference washingtonRef = db.collection("alarms").document(alarmDetail.getAlarmDocument());
                     washingtonRef
                             .update("isRead", true)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -106,11 +115,6 @@ public class Fragment_Tab_4 extends Fragment {
                                 }
                             });
                 }
-                System.out.println("clllllllllllci");
-                Intent intent = new Intent(getContext(), PostingActivity.class);
-//                intent.putExtra("contestName",detailContest.getContestName());
-                startActivity(intent);
-
 
             }
         }));

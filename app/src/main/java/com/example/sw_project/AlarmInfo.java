@@ -13,25 +13,10 @@ public class AlarmInfo implements Comparable<AlarmInfo>{
     private boolean isRead;
     private String alarmDocument;
     private boolean isCheck = false;
-
-    public AlarmInfo(String destinationUid, String userNickname, String uid, int kind, String message,
-                     Long timeStamp, boolean isRead, String alarmDocument, boolean isCheck) {
-        
-        this.destinationUid = destinationUid;
-        this.userNickname = userNickname;
-        this.uid = uid;
-        this.kind = kind;
-        this.message = message;
-        this.timeStamp = timeStamp;
-        this.isRead = isRead;
-        this.alarmDocument = alarmDocument;
-        this.isCheck = isCheck;
-    }
+    private String postId;
 
     public AlarmInfo() {
     }
-
-    // 월 일 구분 방법.... 다시 생각해보기
 
    @Override
     public int compareTo(AlarmInfo alarmInfo) {
@@ -47,6 +32,14 @@ public class AlarmInfo implements Comparable<AlarmInfo>{
         }else{
             return 0;
         }
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 
     public String getDestinationUid() {
