@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,8 +36,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     private FirebaseFirestore firebaseFirestore;
     private WriteInfo writeInfo;
     private DocumentReference commentid;
-
-    FirebaseUser firebaseUser;
+    private FirebaseUser firebaseUser;
 
 
     public CommentListAdapter(ArrayList<CommentInfo> mComments,Activity activity) {
@@ -44,7 +44,6 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         this.mComments = mComments;
         this.activity=activity;
         firebaseFirestore=FirebaseFirestore.getInstance();
-
     }
 
 
@@ -56,14 +55,6 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment_list,parent, false);
 
         final CommentViewHolder holder = new CommentViewHolder(view);
-
-        view.findViewById(R.id.comment_menu);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopup(v, holder.getAdapterPosition());
-            }
-        });
 
         return holder;
     }
@@ -79,6 +70,16 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         holder.commentView.setText(mComments.get(position).getContents());
         holder.CommentwriterView.setText(mComments.get(position).getCommentwriter());
         holder.createdAtView.setText(mComments.get(position).getCreatedAt());
+
+        if(mComments.get(position).getUserUid().equals(firebaseUser.getUid())) {
+            holder.menuImage.setVisibility(View.VISIBLE);
+            holder.menuImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopup(v, holder.getAdapterPosition());
+                }
+            });
+        }
 
     }
 
@@ -120,6 +121,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
                 }
             }
         });
+
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.comments, popup.getMenu());
         popup.show();
@@ -127,9 +129,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
 
-        TextView commentView;
-        TextView CommentwriterView;
-        TextView createdAtView;
+        TextView commentView, CommentwriterView, createdAtView;
+        ImageView menuImage;
 
         public CommentViewHolder(@NonNull View itemView) {
 
@@ -137,6 +138,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             this.commentView = itemView.findViewById(R.id.commentView);
             this.CommentwriterView= itemView.findViewById(R.id.CommentwriterView);
             this.createdAtView=itemView.findViewById(R.id.createdAt);
+            this.menuImage = itemView.findViewById(R.id.comment_menu);
 
         }
     }

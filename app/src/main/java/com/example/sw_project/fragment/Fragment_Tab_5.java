@@ -19,17 +19,6 @@ import com.example.sw_project.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-//public class Fragment_Tab_5 extends Fragment {
-//    View view;
-//    @Nullable
-//    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-//                             @Nullable Bundle savedInstanceState) {
-//        view = (View) inflater.inflate(R.layout.activity_setting,container,false);
-//        return view;
-//    }
-//}
-
 
 public class Fragment_Tab_5 extends Fragment {
 
@@ -78,6 +67,7 @@ public class Fragment_Tab_5 extends Fragment {
                         }
                     }).show();
         });
+
         dropout = view.findViewById((R.id.dropout));
         dropout.setOnClickListener(View -> {
             new AlertDialog.Builder(getActivity())
@@ -92,7 +82,7 @@ public class Fragment_Tab_5 extends Fragment {
                             dialog.dismiss(); //팝업창 종료
                         }
                     })
-                    .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("아니", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //"아니오" 버튼 클릭 시 할 동작
