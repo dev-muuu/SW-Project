@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/outContestButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="교외 공모전으로 GO"
+        android:textColor="#4E00EA"
+        app:backgroundTint="#FFFFFF"
+        app:strokeColor="#4E00EA"
+        app:strokeWidth="1dp" />
+
+
+    <Button
+        android:id="@+id/inContestButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="교내 공모전으로 GO"
+        android:textColor="#4E00EA"
+        app:backgroundTint="#FFFFFF"
+        app:strokeColor="#4E00EA"
+        app:strokeWidth="1dp" />
+</LinearLayout>
