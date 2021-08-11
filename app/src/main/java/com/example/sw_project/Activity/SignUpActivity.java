@@ -38,6 +38,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -49,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ArrayAdapter liberalmajoradapter, socialmajoradapter, engineeringmajoradapter, artsmajoradapter;
     private Spinner liberalmajorspinner, socialmajorspinner, engineeringmajorspinner, artsmajorspinner;
     private String certification;
+    private AlertDialog.Builder builder;
     private AlertDialog dialog;
 
     EditText passwordEditText, passwordCheckEditText, correctEditText, canUseIdText, canEmailUseText, emailCertificationText;
@@ -172,17 +174,34 @@ public class SignUpActivity extends AppCompatActivity {
                     break;
                 case R.id.emailPushButton:
                     Log.e("emailPush","emailPush");
-                    emailCertification();
+                    isSSWUEmail();
                     break;
 
             }
         }
     };
 
-    private void emailCertification(){
+    private void isSSWUEmail(){
+        String email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
+        StringTokenizer stk = new StringTokenizer(email,"@");
+        stk.nextToken();
+        if(stk.nextToken().equals("sungshin.ac.kr"))
+            emailCertification(email);
+        else{
+            builder = new AlertDialog.Builder(SignUpActivity.this);
+
+            dialog = builder.setMessage("학교 계정 이메일로 작성해주세요.\n\n" +
+                    "@sungshin.ac.kr")
+                    .setNegativeButton("확인", null)
+                    .create();
+            dialog.show();
+        }
+
+    }
+
+    private void emailCertification(String email){
         //초기화
         canEmailUseText.setText("");
-        String email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
         db.collection("users")
                 .whereEqualTo("email", email)
                 .get()
@@ -274,7 +293,7 @@ public class SignUpActivity extends AppCompatActivity {
                 || !(correctEditText.getText().toString().equals("일치합니다."))
                 || ! canUseIdText.getText().toString().equals("사용 가능한 아이디입니다.")){
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+            builder = new AlertDialog.Builder(SignUpActivity.this);
 
             dialog = builder.setMessage("빈 칸이 있습니다.")
                     .setNegativeButton("확인", null)

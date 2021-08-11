@@ -80,7 +80,6 @@ public class ViewPostActivity extends AppCompatActivity {
         Intent intent = getIntent();// 인텐트 받아오기
         writeinfo = (WriteInfo) intent.getSerializableExtra("writeInfo");
 
-        ////////
         tabLayout = findViewById(R.id.viewPostTab);
         detailViewPager = findViewById(R.id.postDetailPager);
 
