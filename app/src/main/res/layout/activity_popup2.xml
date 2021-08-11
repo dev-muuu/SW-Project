@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="53dp"
-            android:background="#AC937D"
+            android:background="#673AB7"
             android:gravity="center"
             android:text="글쓴이"
             android:textColor="#fff"
@@ -97,7 +97,7 @@
             android:onClick="mOnClose"
             android:padding="16dp"
             android:text="닫기"
-            android:textColor="#ff7a00"
+            android:textColor="#673AB7"
             android:textSize="15sp" />
     </LinearLayout>
     <!--// 닫기 버튼 -->

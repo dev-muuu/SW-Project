@@ -1,6 +1,5 @@
 package com.example.sw_project.Activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +8,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,14 +19,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
-import com.example.sw_project.ScrapInfo;
-import com.example.sw_project.StudentInfo;
 import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.FragmentAdapter;
-import com.example.sw_project.fragment.ContestDetailListFragment;
-import com.example.sw_project.fragment.ContestStatisticsFragment;
 import com.example.sw_project.fragment.PostCommentFragment;
 import com.example.sw_project.fragment.PostDetailFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,14 +34,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Transaction;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ViewPostActivity extends AppCompatActivity {
 
@@ -57,17 +47,11 @@ public class ViewPostActivity extends AppCompatActivity {
     private PostCommentFragment fragment2;
     private FragmentAdapter adapter;
     private Bundle bundle;
-    private TextView titleView,writerView,dateView,regionView,wantnumView,wantdepView,etcView;
-    private Activity activity;
+//    private Activity activity;
     private WriteInfo writeinfo;
-    private StudentInfo studentInfo;
-    private ScrapInfo alreadyScrap;
-    private String newScrapId;
     private FirebaseUser user;
-    private String TAG = "ScrapActivity";
+    private String TAG = "ViewPostActivity";
     private FirebaseFirestore db;
-    private Button scrapButton, scrapCancelButton, finishRecruitButton;
-    private CheckBox meet, zoom;
     private ArrayList<String> commentId, scrapId;
     private AlertDialog dialog;
     private AlertDialog.Builder builder;
@@ -79,6 +63,9 @@ public class ViewPostActivity extends AppCompatActivity {
 
         Intent intent = getIntent();// 인텐트 받아오기
         writeinfo = (WriteInfo) intent.getSerializableExtra("writeInfo");
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         tabLayout = findViewById(R.id.viewPostTab);
         detailViewPager = findViewById(R.id.postDetailPager);
@@ -106,12 +93,57 @@ public class ViewPostActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
-        ActionBar actionBar = getSupportActionBar();
-        if (writeinfo.getUserUid().equals(user.getUid()))
-            actionBar.setTitle("");
-        else
-            actionBar.hide();
+        if (writeinfo.getUserUid().equals(user.getUid())) {
+            findViewById(R.id.post_menu).setVisibility(View.VISIBLE);
+            findViewById(R.id.post_menu).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopup(v);
+                }
+            });
+        }else{
+            LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout.setMargins(60,30,60,30);
+            findViewById(R.id.viewPostTab).setLayoutParams(layout);
+        }
 
+    }
+
+    private void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(getApplicationContext(), v);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                        builder = new AlertDialog.Builder(ViewPostActivity.this);
+                        dialog = builder.setMessage("작성한 팀원 모집글을 삭제합니다")
+                                .setNegativeButton("CANCEL", null)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        postDeleteFunc();
+                                    }
+                                })
+                                .create();
+                        dialog.show();
+                        return true;
+                    case R.id.edit:
+                        //posting 이동(writeInfo랑 같이)
+                        Intent intent = new Intent(getApplicationContext(), PostingActivity.class);
+                        intent.putExtra("writeInfo",writeinfo);
+                        startActivity(intent);
+                        return true;
+                    default:
+                        return false;
+                }
+
+            }
+        });
+
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.post_menu, popup.getMenu());
+        popup.show();
     }
 
 
