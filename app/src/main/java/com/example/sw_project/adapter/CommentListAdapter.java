@@ -1,6 +1,9 @@
 package com.example.sw_project.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -13,16 +16,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw_project.Activity.WriterPopUpActivity;
 import com.example.sw_project.CommentInfo;
 import com.example.sw_project.R;
-import com.example.sw_project.WriteInfo;
+import com.example.sw_project.StudentInfo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -31,12 +37,11 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     private static final String TAG = "CommentAdapter";
     private ArrayList<CommentInfo> mComments;
-    private CommentInfo commentInfo;
     private Activity activity;
     private FirebaseFirestore firebaseFirestore;
-    private WriteInfo writeInfo;
-    private DocumentReference commentid;
     private FirebaseUser firebaseUser;
+    private AlertDialog dialog;
+    private AlertDialog.Builder builder;
 
 
     public CommentListAdapter(ArrayList<CommentInfo> mComments,Activity activity) {
@@ -51,7 +56,6 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment_list,parent, false);
 
         final CommentViewHolder holder = new CommentViewHolder(view);
@@ -64,12 +68,42 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     public void onBindViewHolder(@NonNull CommentListAdapter.CommentViewHolder holder, int position) {
 
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
-        commentInfo=mComments.get(position);
 
         holder.itemView.setTag(position);
         holder.commentView.setText(mComments.get(position).getContents());
-        holder.CommentwriterView.setText(mComments.get(position).getCommentwriter());
+
+        SpannableString content = new SpannableString(mComments.get(position).getCommentwriter());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        holder.CommentwriterView.setText(content);
         holder.createdAtView.setText(mComments.get(position).getCreatedAt());
+
+        holder.CommentwriterView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                DocumentReference docRef = firebaseFirestore.collection("users").document(mComments.get(position).getUserUid());
+                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        StudentInfo studentInfo = documentSnapshot.toObject(StudentInfo.class);
+
+                        try {
+                            Intent intent = new Intent(activity, WriterPopUpActivity.class);
+                            intent.putExtra("data", studentInfo.getStudentId());
+                            intent.putExtra("data2", studentInfo.getCollege());
+                            intent.putExtra("data3", studentInfo.getDepartment());
+                            intent.putExtra("data4", studentInfo.getContestParticipate());
+                            activity.startActivity(intent);
+                        }catch (NullPointerException e){
+                            builder = new AlertDialog.Builder(activity);
+                            dialog = builder.setMessage("존재하지 않는 회원입니다.")
+                                    .setPositiveButton("OK", null)
+                                    .create();
+                            dialog.show();
+                        }
+                    }
+                });
+            }
+        });
 
         if(mComments.get(position).getUserUid().equals(firebaseUser.getUid())) {
             holder.menuImage.setVisibility(View.VISIBLE);

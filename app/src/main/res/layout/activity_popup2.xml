@@ -16,7 +16,7 @@
             android:layout_height="53dp"
             android:background="#673AB7"
             android:gravity="center"
-            android:text="글쓴이"
+            android:text="회원 정보"
             android:textColor="#fff"
             android:textSize="18sp" />
     </LinearLayout>

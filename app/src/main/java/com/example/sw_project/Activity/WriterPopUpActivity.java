@@ -5,29 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-        import android.view.Window;
-        import android.widget.TextView;
-
-        import com.example.sw_project.R;
-        import com.example.sw_project.StudentInfo;
-        import com.example.sw_project.WriteInfo;
-        import com.google.firebase.auth.FirebaseUser;
-        import com.google.firebase.firestore.FirebaseFirestore;
+import android.view.Window;
+import android.widget.TextView;
+import com.example.sw_project.R;
 
 public class WriterPopUpActivity extends Activity {
 
     private TextView txtText, txtText2, txtText3, txtText4;
     private static final String TAG = "PopUpActivity2";
-    private WriteInfo writeinfo;
-    private FirebaseUser user;
-    private StudentInfo studentInfo;
-    private TextView writerView;
-    private String studentId;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    public WriterPopUpActivity() {
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

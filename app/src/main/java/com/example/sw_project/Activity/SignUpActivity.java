@@ -294,8 +294,7 @@ public class SignUpActivity extends AppCompatActivity {
                 || ! canUseIdText.getText().toString().equals("사용 가능한 아이디입니다.")){
 
             builder = new AlertDialog.Builder(SignUpActivity.this);
-
-            dialog = builder.setMessage("빈 칸이 있습니다.")
+            dialog = builder.setMessage("빈 칸이 존재합니다.")
                     .setNegativeButton("확인", null)
                     .create();
             dialog.show();

@@ -3,8 +3,15 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="false">
+    android:layout_height="100dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="10dp">
 
     <!--    <LinearLayout-->
     <!--        android:layout_width="match_parent"-->
@@ -19,8 +26,8 @@
         <ImageView
             android:id="@+id/contestImageView"
             android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
             app:srcCompat="@android:drawable/ic_menu_edit" />
 
         <LinearLayout
@@ -32,31 +39,20 @@
             <TextView
                 android:id="@+id/contestListTextView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_gravity="left"
                 android:layout_margin="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
                 android:gravity="left"
                 android:text="TextView" />
 
             <TextView
                 android:id="@+id/contestEndLineText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_gravity="left"
                 android:layout_margin="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="13sp" />
         </LinearLayout>
 
     </LinearLayout>

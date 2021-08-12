@@ -7,28 +7,15 @@
     android:orientation="vertical"
     tools:context=".Activity.MainActivity">
 
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="15dp"-->
-<!--        android:layout_marginLeft="15dp"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        android:layout_marginBottom="15dp"-->
-<!--        android:text="팀원 모집글"-->
-<!--        android:textSize="25dp"-->
-<!--        android:textStyle="bold"-->
-<!--        tools:layout_editor_absoluteX="16dp"-->
-<!--        tools:layout_editor_absoluteY="24dp" />-->
-
     <Button
         android:id="@+id/moveMyPostButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
         android:layout_marginBottom="20dp"
         android:text="내가 작성한 글 보러가기" />
 

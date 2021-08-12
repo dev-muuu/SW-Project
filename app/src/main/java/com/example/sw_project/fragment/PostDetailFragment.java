@@ -15,12 +15,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.sw_project.Activity.ContestDetailActivity;
-import com.example.sw_project.Activity.ViewPostActivity;
 import com.example.sw_project.Activity.WriterPopUpActivity;
 import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
@@ -59,7 +57,7 @@ public class PostDetailFragment extends Fragment {
     private FirebaseFirestore db;
     private Button scrapButton, scrapCancelButton, finishRecruitButton;
     public CheckBox meet, zoom;
-    private ArrayList<String> commentId, scrapId;
+//    private ArrayList<String> commentId, scrapId;
     private AlertDialog dialog;
     private AlertDialog.Builder builder;
     public Bundle bundle;
