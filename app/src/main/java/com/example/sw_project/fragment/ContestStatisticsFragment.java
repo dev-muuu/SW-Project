@@ -138,11 +138,11 @@ public class ContestStatisticsFragment extends Fragment {
         rightAxis.setTextSize(15f);
 
         //
-        numChart.setTouchEnabled(false); //확대하지못하게 막아버림! 별로 안좋은 기능인 것 같아~
+        numChart.setTouchEnabled(false);
         numChart.setDrawBarShadow(true); // 그래프 그림자
         numChart.setTouchEnabled(false); // 차트 터치 막기
-        numChart.setDrawValueAboveBar(true); // 입력?값이 차트 위or아래에 그려질 건지 (true=위, false=아래)
-        numChart.setPinchZoom(false); // 두손가락으로 줌 설정
+        numChart.setDrawValueAboveBar(true);
+        numChart.setPinchZoom(false);
         numChart.setDrawGridBackground(false); // 격자구조
         numChart.setMaxVisibleValueCount(5); // 그래프 최대 갯수
         numChart.getDescription().setEnabled(false);// 그래프 오른쪽 하단에 라벨 표시

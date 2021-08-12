@@ -39,7 +39,9 @@
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@id/post"
                 android:background="@android:color/transparent"
-                android:hint="Add a comment" />
+                android:hint="Add a comment"
+                android:paddingLeft="13dp"
+                android:paddingRight="10dp" />
 
             <TextView
                 android:id="@+id/post"

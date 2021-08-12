@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sw_project.R;
 import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.PostListAdapter;
-import com.example.sw_project.fragment.Fragment_Tab_3;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,6 +62,12 @@ public class MyPostActivity extends Fragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 arrayList.add(document.toObject(WriteInfo.class));
                             }
+
+                            if(arrayList.size() == 0)
+                                view.findViewById(R.id.myPostNothing).setVisibility(View.VISIBLE);
+                            else
+                                view.findViewById(R.id.myPostNothing).setVisibility(View.INVISIBLE);
+
                             Collections.sort(arrayList);
                             recyclerView.setHasFixedSize(true);
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

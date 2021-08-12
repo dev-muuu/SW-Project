@@ -3,6 +3,7 @@ package com.example.sw_project.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sw_project.Activity.LogInActivity;
 import com.example.sw_project.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-
+import java.util.ArrayList;
 
 public class Fragment_Tab_5 extends Fragment {
 
@@ -27,6 +35,8 @@ public class Fragment_Tab_5 extends Fragment {
     private Button logout;
     private Button dropout;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private String TAG = "Fragment_Tab_5";
 
     @Nullable
     @Override
@@ -35,6 +45,7 @@ public class Fragment_Tab_5 extends Fragment {
         view = (View) inflater.inflate(R.layout.activity_setting,container,false);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
 //        Button passwordresetButton = (Button) view.findViewById(R.id.passwordresetButton);
 //        passwordresetButton.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +60,7 @@ public class Fragment_Tab_5 extends Fragment {
         logout.setOnClickListener(View -> {
             new AlertDialog.Builder(getActivity())
                     .setMessage("로그아웃 하시겠습니까?")
-                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //AppDatabase.removeLoginAuthKey();
@@ -59,7 +70,7 @@ public class Fragment_Tab_5 extends Fragment {
                             dialog.dismiss(); //팝업창 종료
                         }
                     })
-                    .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //"아니오" 버튼 클릭 시 할 동작
@@ -72,17 +83,18 @@ public class Fragment_Tab_5 extends Fragment {
         dropout.setOnClickListener(View -> {
             new AlertDialog.Builder(getActivity())
                     .setMessage("탈퇴 하시겠습니까?")
-                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //AppDatabase.removeLoginAuthKey();
+                            deleteUsersFile();
                             mAuth.getCurrentUser().delete(); // logout
                             Toast.makeText(getContext(), "회원 탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
                             moveToLogin();
                             dialog.dismiss(); //팝업창 종료
                         }
                     })
-                    .setNegativeButton("아니", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //"아니오" 버튼 클릭 시 할 동작
@@ -91,6 +103,61 @@ public class Fragment_Tab_5 extends Fragment {
                     }).show();
         });
         return view;
+    }
+
+    private void deleteUsersFile(){
+        db.collection("users").document(mAuth.getUid())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+
+        db.collection("posts")
+                .whereEqualTo("userUid", mAuth.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<String> documentId = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                documentId.add(document.getData().get("postid").toString());
+                            }
+                            removeUserPosts(documentId);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void removeUserPosts(ArrayList<String> documentList){
+        for(String postId : documentList){
+            db.collection("posts").document(postId)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error deleting document", e);
+                        }
+                    });
+        }
     }
 
     private void moveToLogin() {

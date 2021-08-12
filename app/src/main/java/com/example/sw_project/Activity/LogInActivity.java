@@ -1,4 +1,5 @@
 package com.example.sw_project.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sw_project.R;
+import com.example.sw_project.StudentInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -61,6 +63,21 @@ public class LogInActivity extends AppCompatActivity {
             }
         }
     };
+
+    //임시 계정 생성
+
+    private void create(){
+        StudentInfo studentInfo = new StudentInfo();
+        studentInfo.setCollege("공과대학");
+        studentInfo.setContestParticipate("6");
+        studentInfo.setDepartment("컴퓨터공학과");
+        studentInfo.setEmail("");
+        studentInfo.setId("tt");
+        studentInfo.setStudentId("19");
+        studentInfo.setUid("");
+        studentInfo.setUserName("tt");
+    }
+
 
     private void LogIn(){
 

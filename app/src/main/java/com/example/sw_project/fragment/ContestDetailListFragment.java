@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw_project.Activity.PostingActivity;
-import com.example.sw_project.Activity.SignUpActivity;
-import com.example.sw_project.Activity.ViewPostActivity;
 import com.example.sw_project.ContestInfo;
 import com.example.sw_project.ParticipateInfo;
 import com.example.sw_project.R;

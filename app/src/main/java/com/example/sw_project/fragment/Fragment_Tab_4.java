@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,13 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw_project.Activity.AlarmSettingActivity;
-import com.example.sw_project.Activity.ContestDetailActivity;
-import com.example.sw_project.Activity.ContestScrapActivity;
-import com.example.sw_project.Activity.MainActivity;
-import com.example.sw_project.Activity.PostingActivity;
 import com.example.sw_project.Activity.ViewPostActivity;
 import com.example.sw_project.AlarmInfo;
-import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
 import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.AlarmListAdapter;
@@ -35,24 +28,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Transaction;
-import com.google.firebase.firestore.WriteBatch;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.StringTokenizer;
 
 public class Fragment_Tab_4 extends Fragment {
     View view;

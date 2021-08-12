@@ -102,17 +102,15 @@ public class AlarmSettingAdapter extends RecyclerView.Adapter<AlarmSettingAdapte
                 alarmTimeText.setText(calcuratedTime);
         }
 
-        if(alarmTextDeco.getIsRead()){
-            // #7CA6A1A1 로 배경 변경
+        if(alarmTextDeco.getIsRead())
             layout.setBackgroundColor(Color.parseColor("#7CA6A1A1"));
-        }
+
 
         //checkbox 설정
-        if(alarmTextDeco.getIsCheck()){
+        if(alarmTextDeco.getIsCheck())
             checkBox.setChecked(true);
-        }else{
+        else
             checkBox.setChecked(false);
-        }
 
     }
 

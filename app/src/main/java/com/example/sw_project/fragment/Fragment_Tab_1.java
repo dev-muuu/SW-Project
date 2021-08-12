@@ -1,7 +1,6 @@
 package com.example.sw_project.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.sw_project.Activity.ContestScrapActivity;
 import com.example.sw_project.Activity.MainActivity;
 import com.example.sw_project.Activity.MyPostActivity;
 import com.example.sw_project.R;
