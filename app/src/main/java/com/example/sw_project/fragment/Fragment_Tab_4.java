@@ -1,5 +1,6 @@
 package com.example.sw_project.fragment;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sw_project.Activity.AlarmSettingActivity;
 import com.example.sw_project.Activity.ViewPostActivity;
 import com.example.sw_project.AlarmInfo;
+import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.R;
 import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.AlarmListAdapter;
@@ -50,6 +52,7 @@ public class Fragment_Tab_4 extends Fragment {
     private FirebaseUser user;
     public FirebaseFirestore db;
     public ArrayList<AlarmInfo> alarmList;
+    private BackPressCloseHandler backPress;
 
     @Nullable
     @Override
@@ -65,6 +68,16 @@ public class Fragment_Tab_4 extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         alarmListDataGet();
+
+        backPress = new BackPressCloseHandler(getActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                backPress.onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
         recycleView.addOnItemTouchListener(new Fragment_Tab_4.RecyclerTouchListener(getContext(), recycleView, new Fragment_Tab_4.ClickListener() {
             @Override

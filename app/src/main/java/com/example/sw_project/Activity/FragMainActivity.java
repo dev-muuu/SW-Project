@@ -1,5 +1,6 @@
 package com.example.sw_project.Activity;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.ContestDTO;
 import com.example.sw_project.R;
 import com.example.sw_project.adapter.FragmentAdapter;
@@ -18,6 +20,7 @@ import com.example.sw_project.fragment.FragmentDesign;
 import com.example.sw_project.fragment.FragmentIT;
 import com.example.sw_project.fragment.FragmentMarketing;
 import com.example.sw_project.fragment.FragmentPlan;
+import com.example.sw_project.fragment.Fragment_Tab_2;
 import com.google.android.material.tabs.TabLayout;
 
 import android.content.Intent;
@@ -34,6 +37,7 @@ public class FragMainActivity extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private FragmentAdapter adapter;
+    private BackPressCloseHandler backPress;
 
     private SearchView searchView;
     private ArrayList<ContestDTO> groupItemList = new ArrayList<>(); // 서버에서 가져온 원본 데이 리스트
@@ -95,6 +99,16 @@ public class FragMainActivity extends Fragment {
         tabLayout.getTabAt(2).setText("마케팅");
         tabLayout.getTabAt(3).setText("IT");
         tabLayout.getTabAt(4).setText("디자인");
+
+        backPress = new BackPressCloseHandler(getActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                ((MainActivity)getActivity()).replaceFragment(Fragment_Tab_2.newInstance(), "Fragment_Tab_2");
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
         return view;
     }

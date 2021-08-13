@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.sw_project.Activity.LogInActivity;
+import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,6 +39,7 @@ public class Fragment_Tab_5 extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String TAG = "Fragment_Tab_5";
+    private BackPressCloseHandler backPress;
 
     @Nullable
     @Override
@@ -102,6 +105,17 @@ public class Fragment_Tab_5 extends Fragment {
                         }
                     }).show();
         });
+
+        backPress = new BackPressCloseHandler(getActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                backPress.onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
+
         return view;
     }
 

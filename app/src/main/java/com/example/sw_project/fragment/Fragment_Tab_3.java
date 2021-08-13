@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.sw_project.Activity.ContestScrapActivity;
 import com.example.sw_project.Activity.MainActivity;
 import com.example.sw_project.Activity.RecruitScrapActivity;
+import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.R;
 import com.example.sw_project.StudentInfo;
 import com.github.mikephil.charting.charts.PieChart;
@@ -42,12 +44,13 @@ public class Fragment_Tab_3 extends Fragment {
     TextView totalStatisticNumber, totalStatisticsText, collegeStatisticsNumber, collegeStatisticsText;
     PieChart pieChartTotal, pieChartCollege;
 
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user;
+    private FirebaseFirestore db;
     private static final String TAG = "MyPageData";
     private RelativeLayout loaderLayout;
     private StudentInfo info;
     private HashMap<String, ArrayList> major;
+    private BackPressCloseHandler backPress;
 
     public static Fragment_Tab_3 newInstance() {
         return new Fragment_Tab_3();
@@ -62,9 +65,22 @@ public class Fragment_Tab_3 extends Fragment {
         view.findViewById(R.id.contestScrapButton).setOnClickListener(onClickListener);
         view.findViewById(R.id.recruitButton).setOnClickListener(onClickListener);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+
         loaderLayout = view.findViewById(R.id.loaderLayout);
 
         userParticipateQuery();
+
+        backPress = new BackPressCloseHandler(getActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                backPress.onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
         return view;
     }

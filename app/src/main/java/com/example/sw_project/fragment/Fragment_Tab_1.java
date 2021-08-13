@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.sw_project.Activity.MainActivity;
 import com.example.sw_project.Activity.MyPostActivity;
+import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.R;
 import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.PostListAdapter;
@@ -38,6 +40,11 @@ public class Fragment_Tab_1 extends Fragment {
     public FirebaseFirestore db;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
+    private BackPressCloseHandler backPress;
+
+    public static Fragment_Tab_1 newInstance() {
+        return new Fragment_Tab_1();
+    }
 
     @Nullable
     @Override
@@ -52,6 +59,16 @@ public class Fragment_Tab_1 extends Fragment {
         view.findViewById(R.id.moveMyPostButton).setOnClickListener(onClickListener);
 
         listDbGet();
+
+        backPress = new BackPressCloseHandler(getActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                backPress.onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
         return view;
     }
@@ -101,4 +118,5 @@ public class Fragment_Tab_1 extends Fragment {
                     }
                 });
     }
+
 }

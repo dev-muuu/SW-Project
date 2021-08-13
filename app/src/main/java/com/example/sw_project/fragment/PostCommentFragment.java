@@ -36,10 +36,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class PostCommentFragment extends Fragment {
 
@@ -136,9 +133,7 @@ public class PostCommentFragment extends Fragment {
         final String addcomment = ((EditText) view.findViewById(R.id.add_comment)).getText().toString();
         commentInfo.setContents(addcomment);
         commentInfo.setPostid(postid);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("MM월dd일 HH시mm분");
-        Date time = Calendar.getInstance().getTime();
-        commentInfo.setCreatedAt(timeFormat.format(time));
+        commentInfo.setCreatedAt(System.currentTimeMillis());
         commentInfo.setUserUid(user.getUid());
 
         DocumentReference docRef = db.collection("users").document(user.getUid());

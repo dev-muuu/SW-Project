@@ -11,16 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.ContestInfo;
 import com.example.sw_project.R;
 import com.example.sw_project.ScrapInfo;
 import com.example.sw_project.adapter.ContestScrapAdapter;
+import com.example.sw_project.fragment.Fragment_Tab_3;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +57,7 @@ public class ContestScrapActivity extends Fragment {
     public RecyclerView recycleView;
     public RecyclerView.Adapter mAdapter;
     public RecyclerView.LayoutManager layoutManager;
+    private BackPressCloseHandler backPress;
 
     public FirebaseUser user;
     public FirebaseFirestore db;
@@ -97,6 +101,16 @@ public class ContestScrapActivity extends Fragment {
 
             }
         });
+
+        backPress = new BackPressCloseHandler(getActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                ((MainActivity)getActivity()).replaceFragment(Fragment_Tab_3.newInstance(), "Fragment_Tab_3");
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
         return view;
     }

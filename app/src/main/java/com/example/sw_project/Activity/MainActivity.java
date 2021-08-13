@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private BadgeDrawable badge;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,7 +160,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (NullPointerException e){
         }
 
-
     }
 
 }
+
+

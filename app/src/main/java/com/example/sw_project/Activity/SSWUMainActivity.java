@@ -5,17 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.R;
 import com.example.sw_project.adapter.SSWUFragmentAdapter;
 import com.example.sw_project.fragment.FragmentArts;
 import com.example.sw_project.fragment.FragmentEngineering;
 import com.example.sw_project.fragment.FragmentLiberal;
 import com.example.sw_project.fragment.FragmentSocial;
+import com.example.sw_project.fragment.Fragment_Tab_2;
 import com.google.android.material.tabs.TabLayout;
 
 public class SSWUMainActivity extends Fragment {
@@ -26,6 +29,7 @@ public class SSWUMainActivity extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private SSWUFragmentAdapter adapter;
+    private BackPressCloseHandler backPress;
 
     public static SSWUMainActivity newInstance() {
         return new SSWUMainActivity();
@@ -57,6 +61,16 @@ public class SSWUMainActivity extends Fragment {
         tabLayout.getTabAt(1).setText("사회대학");
         tabLayout.getTabAt(2).setText("공과대학");
         tabLayout.getTabAt(3).setText("예체능대학");
+
+        backPress = new BackPressCloseHandler(getActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                ((MainActivity)getActivity()).replaceFragment(Fragment_Tab_2.newInstance(), "Fragment_Tab_2");
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
         return view;
     }

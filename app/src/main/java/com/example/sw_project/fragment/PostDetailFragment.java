@@ -40,7 +40,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class PostDetailFragment extends Fragment {
@@ -57,7 +56,6 @@ public class PostDetailFragment extends Fragment {
     private FirebaseFirestore db;
     private Button scrapButton, scrapCancelButton, finishRecruitButton;
     public CheckBox meet, zoom;
-//    private ArrayList<String> commentId, scrapId;
     private AlertDialog dialog;
     private AlertDialog.Builder builder;
     public Bundle bundle;

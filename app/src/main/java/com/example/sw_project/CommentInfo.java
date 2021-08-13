@@ -1,17 +1,13 @@
 package com.example.sw_project;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class CommentInfo implements Serializable {
 
     private String Commentwriter;
     private String userUid;
     private String contents;
-    private String createdAt;
+    private Long createdAt;
     private String postid;
     private String commentid;
 
@@ -31,9 +27,9 @@ public class CommentInfo implements Serializable {
 
     public void setContents(String contents) { this.contents = contents; }
 
-    public String getCreatedAt() { return createdAt; }
+    public Long getCreatedAt() { return createdAt; }
 
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public void setCreatedAt(Long createdAt) { this.createdAt = createdAt; }
 
     public String getPostid() {return postid;}
 

@@ -28,6 +28,7 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         //액션바 숨기기
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -38,13 +39,6 @@ public class LogInActivity extends AppCompatActivity {
         findViewById(R.id.logInButton).setOnClickListener(onClickListener);
         findViewById(R.id.signUpButton).setOnClickListener(onClickListener);
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -98,7 +92,7 @@ public class LogInActivity extends AppCompatActivity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 if (task.getException() != null) {
-                                    startToast(task.getException().toString());
+                                    startToast("아이디 또는 비밀번호를 다시 확인해주세요");
                                 }
 
                             }

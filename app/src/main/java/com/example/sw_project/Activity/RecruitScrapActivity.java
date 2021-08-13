@@ -6,16 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.R;
 import com.example.sw_project.ScrapInfo;
 import com.example.sw_project.WriteInfo;
 import com.example.sw_project.adapter.PostListAdapter;
+import com.example.sw_project.fragment.Fragment_Tab_3;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +37,7 @@ public class RecruitScrapActivity extends Fragment {
     public FirebaseFirestore db;
     public String TAG = "RecruitActivity";
     public FirebaseUser user;
+    private BackPressCloseHandler backPress;
 
     public static RecruitScrapActivity newInstance() {
         return new RecruitScrapActivity();
@@ -50,6 +54,16 @@ public class RecruitScrapActivity extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         getScrapData();
+
+        backPress = new BackPressCloseHandler(getActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                ((MainActivity)getActivity()).replaceFragment(Fragment_Tab_3.newInstance(), "Fragment_Tab_3");
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
         return view;
     }

@@ -31,7 +31,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.StringTokenizer;
 
 public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.CommentViewHolder> {
 
@@ -42,6 +46,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     private FirebaseUser firebaseUser;
     private AlertDialog dialog;
     private AlertDialog.Builder builder;
+    private Date time = Calendar.getInstance().getTime();
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("yy년 MM월dd일");
 
 
     public CommentListAdapter(ArrayList<CommentInfo> mComments,Activity activity) {
@@ -75,7 +81,34 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         SpannableString content = new SpannableString(mComments.get(position).getCommentwriter());
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         holder.CommentwriterView.setText(content);
-        holder.createdAtView.setText(mComments.get(position).getCreatedAt());
+
+        // 알림 시간 텍스트 코드
+        Long currentTime = System.currentTimeMillis();
+        Long commentTime = mComments.get(position).getCreatedAt();
+        Long currentDiffer = currentTime - commentTime;
+
+        String calcuratedTime;
+
+        if(currentDiffer / 1000 < 60){
+            //초단위
+            calcuratedTime = String.format("%d초 전",currentDiffer / 1000);
+        }else if(currentDiffer / (1000 * 60) < 60) {
+            //분단위
+            calcuratedTime = String.format("%d분 전",currentDiffer / (1000 * 60));
+        }else if(currentDiffer / (1000 * 60 * 60) < 2){
+            //시단위
+            calcuratedTime = String.format("%d시간 전",currentDiffer / (1000 * 60 * 60));
+        }else if(currentDiffer / (1000 * 60 * 60) < 24){
+            //
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH : mm");
+            calcuratedTime = timeFormat.format(new Date(commentTime));
+        } else{
+            //이외에는 날짜
+            SimpleDateFormat timeFormat = new SimpleDateFormat("M월 d일");
+            calcuratedTime = timeFormat.format(new Date(commentTime));
+        }
+
+        holder.createdAtView.setText(calcuratedTime);
 
         holder.CommentwriterView.setOnClickListener(new View.OnClickListener(){
             @Override

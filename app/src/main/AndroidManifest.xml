@@ -14,10 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SWProject">
-        <activity android:name=".Activity.LogInActivity">
+        <activity android:name=".Activity.LogInActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,12 +27,6 @@
         </activity>
         <activity android:name=".Activity.PostingActivity">
         </activity>
-        <activity android:name=".Activity.PostListActivity">
-        </activity>
-<!--        <activity android:name=".Activity.MyPageActivity">-->
-<!--        </activity>-->
-<!--        <activity android:name=".Activity.ContestScrapActivity">-->
-<!--        </activity>-->
         <activity android:name=".Activity.RecruitScrapActivity">
         </activity>
         <activity android:name=".Activity.ContestDetailActivity">
@@ -46,8 +40,6 @@
         <activity android:name=".Activity.MyPostActivity">
         </activity>
         <activity android:name=".Activity.FragMainActivity">
-        </activity>
-        <activity android:name=".ViewPostActivity_check">
         </activity>
         <activity android:name=".Activity.WriterPopUpActivity"
             android:theme="@android:style/Theme.Dialog" />
