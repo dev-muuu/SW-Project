@@ -9,14 +9,13 @@
     android:paddingBottom="10dp">
 
     <TextView
-        android:id="@+id/setting"
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="117dp"
-        android:layout_weight="1"
+        android:layout_height="141dp"
         android:gravity="center"
         android:shadowColor="#000000"
-        android:text="환경설정"
-        android:textSize="24sp"
+        android:text="환경 설정"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -33,7 +32,7 @@
             android:ems="10"
             android:inputType="textMultiLine"
             android:text="비밀번호 재설정"
-            app:backgroundTint="@color/purple_500"
+            app:backgroundTint="#6B6FAE"
             app:icon="@android:drawable/ic_popup_sync"
             tools:ignore="DuplicateIds" />
 
@@ -42,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="로그아웃"
-            app:backgroundTint="@color/purple_500"
+            app:backgroundTint="#6B6FAE"
             app:icon="@android:drawable/ic_lock_power_off" />
 
         <Button
@@ -50,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="탈퇴하기"
+            app:backgroundTint="#6B6FAE"
             app:icon="@android:drawable/checkbox_off_background" />
 
     </LinearLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/popUpDateText"
         android:layout_width="match_parent"
         android:layout_height="53dp"
-        android:background="#673AB7"
+        android:background="#6B6FAE"
         android:gravity="center"
         android:textColor="#fff"
         android:textSize="20sp" />
@@ -42,7 +42,7 @@
             android:onClick="mOnClose"
             android:padding="16dp"
             android:text="CLOSE"
-            android:textColor="#673AB7"
+            android:textColor="#6B6FAE"
             android:textSize="15sp" />
     </LinearLayout>
 </LinearLayout>

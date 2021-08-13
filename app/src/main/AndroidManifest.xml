@@ -14,12 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SWProject">
-        <activity android:name=".Activity.LogInActivity"
-            android:noHistory="true">
+        <activity android:name=".Activity.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Activity.LogInActivity"
+            android:noHistory="true">
         </activity>
         <activity android:name=".Activity.SignUpActivity">
         </activity>

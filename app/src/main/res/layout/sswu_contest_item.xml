@@ -63,10 +63,11 @@
     <Button
         android:id="@+id/recruitInContestButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
         android:layout_gravity="bottom|center"
-        android:background="#4E00EA"
-        android:text="팀원 모집" />
+        android:background="#6B6FAE"
+        android:text="팀원 모집"
+        app:backgroundTint="#6B6FAE" />
 
 
 </androidx.cardview.widget.CardView>

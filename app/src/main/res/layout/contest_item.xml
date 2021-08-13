@@ -43,14 +43,14 @@
 
                 <TextView
                     android:id="@+id/txt_chartName"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_margin="0dp"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/txt_chartDue"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_margin="0dp"
                     android:textSize="10sp" />
@@ -62,10 +62,11 @@
         <Button
             android:id="@+id/contestRecruitButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:layout_gravity="bottom|center"
-            android:background="#673AB7"
-            android:text="팀원 모집" />
+            android:background="#6B6FAE"
+            android:text="팀원 모집"
+            app:backgroundTint="#6B6FAE" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

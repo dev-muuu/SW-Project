@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,25 +15,29 @@
             android:id="@+id/movePostingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:text="팀원 모집글 작성" />
+            android:drawableLeft="@drawable/write_xml"
+            android:text="팀원 모집글 작성하기"
+            app:backgroundTint="#6B6FAE" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/alreadyPartiButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:text="공모전 참여 완료" />
+            android:backgroundTint="#EEEDED"
+            android:text="공모전 참여 완료"/>
+
     </LinearLayout>
 
     <RelativeLayout

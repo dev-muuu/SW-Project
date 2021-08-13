@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,14 +13,14 @@
         tools:ignore="UnknownId">
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:gravity="center"
-            android:text="비밀번호 재설정"
-            android:textColor="#000000"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:text="비밀번호 재설정"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="normal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,20 +28,37 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <EditText
-                android:id="@+id/emailEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:ems="10"
-                android:hint="이메일"
-                android:inputType="textEmailAddress" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="이메일" />
+
+                <EditText
+                    android:id="@+id/emailEditText"
+                    android:layout_width="376dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/edittext_rectangle"
+                    android:ems="10"
+                    android:hint="학번@sungshin.ac.kr"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/sendButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="보내기" />
+                android:text="보내기"
+                app:backgroundTint="#6B6FAE" />
         </LinearLayout>
 
     </LinearLayout>

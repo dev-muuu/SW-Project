@@ -18,26 +18,28 @@
             android:orientation="vertical">
 
             <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/contestDetailTab"
-                    android:layout_width="match_parent"
+                android:id="@+id/contestDetailTab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="#6B6FAE"
+                app:tabSelectedTextColor="#6B6FAE"
+                app:tabMode="fixed">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/cruitTab"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    app:tabGravity="fill"
-                    app:tabMode="fixed">
+                    android:text="팀원 모집" />
 
-                    <com.google.android.material.tabs.TabItem
-                        android:id="@+id/cruitTab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="팀원 모집" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/etcInfoTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관련 정보" />
 
-                    <com.google.android.material.tabs.TabItem
-                        android:id="@+id/etcInfoTab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="관련 정보" />
-
-                </com.google.android.material.tabs.TabLayout>
+            </com.google.android.material.tabs.TabLayout>
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/contestDetailViewPager"
@@ -80,7 +82,12 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
-                    android:text="웹사이트로 이동" />
+                    android:drawableLeft="@drawable/web_xml"
+                    android:text="웹사이트로 이동"
+                    android:textColor="#000000"
+                    app:backgroundTint="#FFFFFF"
+                    app:strokeColor="#90989B"
+                    app:strokeWidth="1dp"/>
             </RelativeLayout>
 
 
@@ -104,8 +111,12 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:drawableLeft="@drawable/no_xml"
                     android:text="공모전 스크랩"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#000000"
+                    app:backgroundTint="#FFFFFF"
+                    app:strokeColor="#90989B"
+                    app:strokeWidth="1dp"/>
 
                 <Button
                     android:id="@+id/contestScrapCheckCancelButton"
@@ -118,10 +129,11 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:drawableLeft="@drawable/yes_xml"
                     android:text="스크랩 취소"
-                    android:textColor="#4E00EA"
+                    android:textColor="#000000"
                     app:backgroundTint="#FFFFFF"
-                    app:strokeColor="#4E00EA"
+                    app:strokeColor="#90989B"
                     app:strokeWidth="1dp" />
 
             </RelativeLayout>

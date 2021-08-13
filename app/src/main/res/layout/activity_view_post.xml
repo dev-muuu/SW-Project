@@ -24,7 +24,7 @@
             <TextView
                 android:id="@+id/titleView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="41dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginEnd="20dp"
@@ -51,7 +51,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
                 android:padding="3dp"
-                android:text="글쓴이: "
+                android:text="글쓴이  :  "
                 android:textColor="#000000" />
 
             <TextView
@@ -77,7 +77,7 @@
 
                 <TextView
                     android:id="@+id/meetWayText"
-                    android:layout_width="120dp"
+                    android:layout_width="111dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:focusableInTouchMode="false"
@@ -91,8 +91,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="45dp"
-                    android:layout_marginRight="45dp"
+                    android:layout_marginEnd="60dp"
+                    android:layout_marginRight="60dp"
                     android:text="대면" />
 
                 <CheckBox
@@ -110,7 +110,7 @@
 
                 <TextView
                     android:id="@+id/regionText"
-                    android:layout_width="120dp"
+                    android:layout_width="110dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:focusableInTouchMode="false"
@@ -122,8 +122,8 @@
                     android:id="@+id/regionView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="19dp"
+                    android:layout_marginRight="19dp"
                     android:ems="10"
                     android:enabled="false"
                     android:importantForAutofill="no"
@@ -142,7 +142,7 @@
 
                 <TextView
                     android:id="@+id/wantNumText"
-                    android:layout_width="120dp"
+                    android:layout_width="111dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:focusableInTouchMode="false"
@@ -154,8 +154,8 @@
                     android:id="@+id/wantnumView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="19dp"
+                    android:layout_marginRight="19dp"
                     android:ems="10"
                     android:enabled="false"
                     android:importantForAutofill="no"
@@ -173,7 +173,7 @@
 
                 <TextView
                     android:id="@+id/deptText"
-                    android:layout_width="120dp"
+                    android:layout_width="110dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:focusableInTouchMode="false"
@@ -185,8 +185,8 @@
                     android:id="@+id/wantdepView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="19dp"
+                    android:layout_marginRight="19dp"
                     android:ems="10"
                     android:enabled="false"
                     android:importantForAutofill="no"
@@ -200,17 +200,20 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="42dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="기타란"
+                android:text="기타"
                 android:textColor="#000000" />
 
             <EditText
                 android:id="@+id/etcView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginRight="22dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:enabled="false"
@@ -218,6 +221,7 @@
                 android:inputType="textMultiLine"
                 android:lines="15"
                 android:padding="10dp"
+                android:background="#f1f1f1"
                 android:textColor="#000000" />
 
         </LinearLayout>
@@ -255,7 +259,11 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
-                    android:text="공모전 페이지 이동" />
+                    android:text="공모전 페이지로 이동"
+                    android:textColor="#000000"
+                    app:backgroundTint="#FFFFFF"
+                    app:strokeColor="#90989B"
+                    app:strokeWidth="1dp" />
             </RelativeLayout>
 
 
@@ -279,8 +287,12 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:drawableLeft="@drawable/no_xml"
                     android:text="모집글 스크랩"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#000000"
+                    app:backgroundTint="#FFFFFF"
+                    app:strokeColor="#90989B"
+                    app:strokeWidth="1dp" />
 
                 <Button
                     android:id="@+id/scrapCancelButton"
@@ -293,14 +305,15 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:drawableLeft="@drawable/yes_xml"
                     android:text="스크랩 취소"
-                    android:textColor="#4E00EA"
                     android:visibility="invisible"
+                    android:textColor="#000000"
                     app:backgroundTint="#FFFFFF"
-                    app:strokeColor="#4E00EA"
-                    app:strokeWidth="1dp" />
+                    app:strokeColor="#90989B"
+                    app:strokeWidth="1dp"/>
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/finishRecruitButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -312,8 +325,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:text="팀원모집 완료"
-                    android:textColor="#FFFFFF"
-                    android:visibility="invisible" />
+                    android:backgroundTint="#EEEDED" />
 
 
             </RelativeLayout>
