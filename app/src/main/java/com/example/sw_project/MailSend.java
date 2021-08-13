@@ -1,7 +1,6 @@
 package com.example.sw_project;
 
 import android.util.Log;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
@@ -25,7 +24,7 @@ public class MailSend {
 
         public MailAuth() {
             String mail_id = "pfull.pro@gmail.com";
-            String mail_pw = "dkffkqkqk34!";
+            String mail_pw = "roqkfvmfhwprxmdm20!";
 
             pa = new PasswordAuthentication(mail_id, mail_pw);
         }
@@ -61,7 +60,7 @@ public class MailSend {
             //메일 본문
             msg.setText("안녕하세요 성공하자 어플 관리자입니다.\n" +
                     "인증번호는 " +
-                    certification, "UTF-8");
+                    certification + " 입니다.", "UTF-8");
 
 //            msg.setText("인증번호는 ", "UTF-8");
 //            msg.setText(certification, "UTF-8");

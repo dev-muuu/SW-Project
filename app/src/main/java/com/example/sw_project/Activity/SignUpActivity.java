@@ -154,12 +154,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//    }
-
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -238,7 +232,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 AsyncTask.execute(() -> {
                                     MailSend.mailSend(email, certification);
                                 });
-                                startToast("학교 이메일로 인증번호가 발송되었습니다.");
+
+                                startToast("학교 계정으로 인증 메일이 전송되었습니다.");
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

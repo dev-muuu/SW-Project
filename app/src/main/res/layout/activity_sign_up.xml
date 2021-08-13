@@ -4,7 +4,6 @@
     android:id="@+id/signUpEditText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp"
     android:orientation="vertical">
 
     <ScrollView
@@ -14,6 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:orientation="vertical">
 
             <TextView
@@ -53,15 +53,24 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/edittext_rectangle"
+                        android:gravity="center"
                         android:hint="학번@sungshin.ac.kr"
                         android:inputType="textEmailAddress" />
 
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <Button
                         android:id="@+id/emailPushButton"
-                        android:layout_width="140dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="43dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
                         android:gravity="center"
                         android:text="인증메일 전송"
                         app:backgroundTint="#6B6FAE" />
@@ -104,11 +113,13 @@
                         android:id="@+id/canEmailUseText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@null"
                         android:ems="10"
                         android:inputType="textPersonName"
-                        android:background="@null"
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -129,7 +140,7 @@
 
                 <EditText
                     android:id="@+id/userNameText"
-                    android:layout_width="382dp"
+                    android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_margin="10dp"
                     android:background="@drawable/edittext_rectangle"
@@ -154,7 +165,7 @@
 
                 <EditText
                     android:id="@+id/contestCountEditText"
-                    android:layout_width="382dp"
+                    android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
@@ -182,7 +193,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="43dp"
                     android:orientation="horizontal">
 
                     <EditText
@@ -195,14 +206,22 @@
                         android:background="@drawable/edittext_rectangle"
                         android:inputType="textPersonName" />
 
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <Button
                         android:id="@+id/canUseIdButton"
                         android:layout_width="wrap_content"
                         android:layout_height="43dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
-                        android:gravity="left"
-                        android:text="아이디 중복 확인"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:text="중복여부 확인"
                         android:textSize="14sp"
                         app:backgroundTint="#6B6FAE" />
 
@@ -218,10 +237,10 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
+                android:background="@null"
                 android:ems="10"
                 android:gravity="top"
                 android:inputType="textPersonName"
-                android:background="@null"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -240,7 +259,7 @@
 
                 <EditText
                     android:id="@+id/passwdText"
-                    android:layout_width="382dp"
+                    android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
@@ -286,15 +305,17 @@
                         android:id="@+id/correctEditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="0.5"
+                        android:background="@null"
                         android:ems="10"
                         android:inputType="textPersonName"
                         android:paddingBottom="10dp"
-                        android:background="@null"
                         android:textSize="14sp" />
 
 
@@ -343,7 +364,7 @@
 
                 <EditText
                     android:id="@+id/studentIdSet"
-                    android:layout_width="382dp"
+                    android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
@@ -361,9 +382,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:background="@drawable/button_login"
                 android:paddingBottom="10dp"
                 android:text="회원가입"
-                android:background="@drawable/button_login"
                 app:backgroundTint="#6B6FAE" />
 
         </LinearLayout>

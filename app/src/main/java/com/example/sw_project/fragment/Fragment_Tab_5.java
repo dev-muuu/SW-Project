@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sw_project.Activity.LogInActivity;
 import com.example.sw_project.BackPressCloseHandler;
+import com.example.sw_project.MySharedPreferences;
 import com.example.sw_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -69,6 +70,7 @@ public class Fragment_Tab_5 extends Fragment {
                             //AppDatabase.removeLoginAuthKey();
                             mAuth.signOut(); // logout
                             Toast.makeText(getContext(), "로그아읏 되었습니다.", Toast.LENGTH_SHORT).show();
+                            new MySharedPreferences(getActivity()).clearUser();
                             moveToLogin();
                             dialog.dismiss(); //팝업창 종료
                         }
@@ -93,6 +95,7 @@ public class Fragment_Tab_5 extends Fragment {
                             deleteUsersFile();
                             mAuth.getCurrentUser().delete(); // logout
                             Toast.makeText(getContext(), "회원 탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
+                            new MySharedPreferences(getActivity()).clearUser();
                             moveToLogin();
                             dialog.dismiss(); //팝업창 종료
                         }
@@ -176,6 +179,7 @@ public class Fragment_Tab_5 extends Fragment {
 
     private void moveToLogin() {
         Intent intent = new Intent(getActivity(), LogInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
     }
