@@ -39,7 +39,7 @@ public class SSWUMainActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = (ViewGroup) inflater.inflate(R.layout.frag_activity_main, container, false);
+        view = (ViewGroup) inflater.inflate(R.layout.sswu_activity_main, container, false);
 
         tabLayout = view.findViewById(R.id.tabs);
         viewPager = view.findViewById(R.id.view_pager);

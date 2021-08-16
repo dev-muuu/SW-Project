@@ -111,6 +111,28 @@ public class SignUpActivity extends AppCompatActivity {
         passwordCheckEditText = (EditText)findViewById(R.id.passwdCheckText);
         correctEditText = (EditText) findViewById(R.id.correctEditText);
 
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (passwordEditText.getText().toString().length() < 6) {
+                    // correct
+                    correctEditText.setText("6자리 이상으로 설정해주세요.");
+                } else {
+                    // incorrect
+                    correctEditText.setText("");
+                }
+            }
+        });
+
         passwordCheckEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,12 +145,14 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (passwordEditText.getText().toString().equals(passwordCheckEditText.getText().toString())) {
-                    // correct
-                    correctEditText.setText("일치합니다.");
-                } else {
-                    // incorrect
-                    correctEditText.setText("일치하지 않습니다.");
+                if (passwordEditText.getText().toString().length() >= 6) {
+                    if (passwordEditText.getText().toString().equals(passwordCheckEditText.getText().toString())) {
+                        // correct
+                        correctEditText.setText("일치합니다.");
+                    } else {
+                        // incorrect
+                        correctEditText.setText("일치하지 않습니다.");
+                    }
                 }
             }
         });
@@ -396,6 +420,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void moveLogInActivity(){
         Intent intent = new Intent(this, LogInActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void startToast(String msg){

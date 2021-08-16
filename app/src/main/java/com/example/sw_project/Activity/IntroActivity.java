@@ -61,10 +61,9 @@ public class IntroActivity extends Activity {
                         if (task.isSuccessful()) {
                             startMainActivity();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            if (task.getException() != null) {
-                            }
-
+                            Intent intent = new Intent (getApplicationContext(), LogInActivity.class);
+                            startActivity(intent); //다음화면으로 넘어감
+                            finish();
                         }
                     }
                 });

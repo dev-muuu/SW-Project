@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.sw_project.Activity.LogInActivity;
+import com.example.sw_project.Activity.Setting2Activity;
 import com.example.sw_project.BackPressCloseHandler;
 import com.example.sw_project.MySharedPreferences;
 import com.example.sw_project.R;
@@ -51,14 +52,14 @@ public class Fragment_Tab_5 extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-//        Button passwordresetButton = (Button) view.findViewById(R.id.passwordresetButton);
-//        passwordresetButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getApplicationContext(), Setting2Activity.class);
-//                startActivity(intent);
-//            }
-//        });
+        Button passwordresetButton = (Button) view.findViewById(R.id.passwordresetbtn);
+        passwordresetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), Setting2Activity.class);
+                startActivity(intent);
+            }
+        });
 
         logout = view.findViewById((R.id.logout));
         logout.setOnClickListener(View -> {
@@ -69,7 +70,7 @@ public class Fragment_Tab_5 extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             //AppDatabase.removeLoginAuthKey();
                             mAuth.signOut(); // logout
-                            Toast.makeText(getContext(), "로그아읏 되었습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                             new MySharedPreferences(getActivity()).clearUser();
                             moveToLogin();
                             dialog.dismiss(); //팝업창 종료

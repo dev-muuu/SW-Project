@@ -87,7 +87,12 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         Long commentTime = mComments.get(position).getCreatedAt();
         Long currentDiffer = currentTime - commentTime;
 
-        String calcuratedTime;
+        String calcuratedTime, currentDate, commentDate;
+        SimpleDateFormat timeFormat, dateFormat;
+
+        dateFormat = new SimpleDateFormat("d");
+        currentDate = dateFormat.format(new Date(currentTime));
+        commentDate = dateFormat.format(new Date(commentTime));
 
         if(currentDiffer / 1000 < 60){
             //초단위
@@ -98,13 +103,13 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         }else if(currentDiffer / (1000 * 60 * 60) < 2){
             //시단위
             calcuratedTime = String.format("%d시간 전",currentDiffer / (1000 * 60 * 60));
-        }else if(currentDiffer / (1000 * 60 * 60) < 24){
+        }else if(currentDate.equals(commentDate)){
             //
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH : mm");
+            timeFormat = new SimpleDateFormat("HH : mm");
             calcuratedTime = timeFormat.format(new Date(commentTime));
         } else{
             //이외에는 날짜
-            SimpleDateFormat timeFormat = new SimpleDateFormat("M월 d일");
+            timeFormat = new SimpleDateFormat("M월 d일");
             calcuratedTime = timeFormat.format(new Date(commentTime));
         }
 
