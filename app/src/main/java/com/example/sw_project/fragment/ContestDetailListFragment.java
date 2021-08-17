@@ -96,7 +96,6 @@ public class ContestDetailListFragment extends Fragment {
 
         //초기화
         alreadyPost = false;
-
         db.collection("posts")
                 .whereEqualTo("contestId",contestInfo.getContestId())
                 .get()
@@ -113,7 +112,6 @@ public class ContestDetailListFragment extends Fragment {
                                 if(document.getData().get("userUid").toString().equals(user.getUid()))
                                     alreadyPost = true;
                             }
-
                             if(arrayList.size() == 0)
                                 view.findViewById(R.id.isPostZeroText).setVisibility(View.VISIBLE);
                             else

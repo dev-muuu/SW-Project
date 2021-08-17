@@ -65,7 +65,7 @@
                         android:inputType="textPersonName"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -131,7 +131,7 @@
                         android:inputType="textPersonName"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -192,7 +192,7 @@
                         android:inputType="textPersonName"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -228,7 +228,8 @@
                     android:hint="@string/contents"
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine"
-                    android:lines="15" />
+                    android:lines="15"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

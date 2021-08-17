@@ -87,7 +87,6 @@ public class ContestStatisticsFragment extends Fragment {
                                 BarChartGraph(labelList, percentageList);
                                 BarChartGraph2(label2List,percentage2List);
                             }catch(NullPointerException e) {
-                                System.out.println("nothiiiiiing");
                             }
                         } else {
                             Log.d(TAG, "No such document");

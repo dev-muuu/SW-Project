@@ -48,9 +48,6 @@ public class AlarmSettingAdapter extends RecyclerView.Adapter<AlarmSettingAdapte
     @Override
     public void onBindViewHolder(AlarmSettingAdapter.ViewHolder viewHolder, int position) {
 
-        //카드뷰 색상 초기화(다른 카드뷰 색상 영향 받지 않기 위해)
-        viewHolder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"));
-
         AlarmInfo alarmTextDeco = mDataset.get(position);
 
         CheckBox checkBox = viewHolder.cardView.findViewById(R.id.alarmCheckBox);
@@ -66,6 +63,9 @@ public class AlarmSettingAdapter extends RecyclerView.Adapter<AlarmSettingAdapte
         TextView alarmMessageText = viewHolder.cardView.findViewById(R.id.alarmMessageText);
         TextView alarmTimeText = viewHolder.cardView.findViewById(R.id.alarmTimeText);
         LinearLayout layout = viewHolder.cardView.findViewById(R.id.alaramSettingCardLayout);
+
+        //카드뷰 색상 초기화(다른 카드뷰 색상 영향 받지 않기 위해)
+        layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         // 알림 시간 텍스트 코드
         Long currentTime = System.currentTimeMillis();

@@ -131,7 +131,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:textColor="#000000"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -162,7 +162,8 @@
                     android:inputType="textPersonName"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="17sp" />
 
             </LinearLayout>
 
@@ -194,7 +195,7 @@
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:textColor="#000000"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
 
@@ -215,14 +216,15 @@
                 android:layout_marginEnd="22dp"
                 android:layout_marginRight="22dp"
                 android:layout_weight="1"
+                android:background="#f1f1f1"
                 android:ems="10"
                 android:enabled="false"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:lines="15"
                 android:padding="10dp"
-                android:background="#f1f1f1"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
         </LinearLayout>
     </ScrollView>
@@ -313,7 +315,7 @@
                     app:strokeColor="#90989B"
                     app:strokeWidth="1dp"/>
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
                     android:id="@+id/finishRecruitButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -324,8 +326,9 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:backgroundTint="#EEEDED"
                     android:text="팀원모집 완료"
-                    android:backgroundTint="#EEEDED" />
+                    android:visibility="invisible" />
 
 
             </RelativeLayout>

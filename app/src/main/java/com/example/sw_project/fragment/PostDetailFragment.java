@@ -81,7 +81,6 @@ public class PostDetailFragment extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
-
         if (writeinfo.getUserUid().equals(user.getUid())) {
             scrapButton.setVisibility(View.INVISIBLE);
             finishRecruitButton.setVisibility(View.VISIBLE);

@@ -46,15 +46,14 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
 
     @Override
     public void onBindViewHolder(AlarmListAdapter.ViewHolder viewHolder, int position) {
-        Log.d("tag1" , "onBind");
-
-        //카드뷰 색상 초기화(다른 카드뷰 색상 영향 받지 않기 위해)
-        viewHolder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"));
 
         TextView alarmKindText = viewHolder.cardView.findViewById(R.id.alarmKindText);
         TextView alarmMessageText = viewHolder.cardView.findViewById(R.id.alarmMessageText);
         TextView alarmTimeText = viewHolder.cardView.findViewById(R.id.alarmTimeText);
         LinearLayout layout = viewHolder.cardView.findViewById(R.id.alarmCardLayout);
+
+        //카드뷰 색상 초기화(다른 카드뷰 색상 영향 받지 않기 위해)
+        layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         AlarmInfo alarmTextDeco = mDataset.get(position);
 
@@ -96,7 +95,6 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
 
         if(mDataset.get(position).getIsRead()){
             // #7CA6A1A1 로 배경 변경
-//            viewHolder.cardView.setCardBackgroundColor(Color.parseColor("#7CA6A1A1"));
             layout.setBackgroundColor(Color.parseColor("#7CA6A1A1"));
         }
 

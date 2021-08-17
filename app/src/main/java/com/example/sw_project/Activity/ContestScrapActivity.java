@@ -25,9 +25,12 @@ import com.example.sw_project.ScrapInfo;
 import com.example.sw_project.adapter.ContestScrapAdapter;
 import com.example.sw_project.fragment.Fragment_Tab_3;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -153,34 +156,25 @@ public class ContestScrapActivity extends Fragment {
                             scrapContestList = new ArrayList<>();
 
                             for(ScrapInfo findPost : scrapArray){
-                                db.collection("contests")
-                                        .whereEqualTo("contestId", findPost.getContestId())
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-
-                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        Log.d(TAG, document.getId() + " => " + document.getData());
-                                                        scrapContestList.add(document.toObject(ContestInfo.class));
-                                                        try {
-                                                            temporaryList.add(document.getData().get("endDate").toString());
-                                                        }catch (NullPointerException e){
-                                                        }
-                                                    }
-                                                    convertDateType();
-                                                    recycleView.setHasFixedSize(true);
-                                                    layoutManager = new LinearLayoutManager(activity);
-                                                    recycleView.setLayoutManager(layoutManager);
-                                                    mAdapter = new ContestScrapAdapter(scrapContestList, getActivity());
-                                                    recycleView.setAdapter(mAdapter);
-
-                                                } else {
-                                                    Log.d(TAG, "Error getting documents: ", task.getException());
-                                                }
-                                            }
-                                        });
+                                DocumentReference docRef = db.collection("contests").document(findPost.getContestId());
+                                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        scrapContestList.add(documentSnapshot.toObject(ContestInfo.class));
+                                        try {
+                                            temporaryList.add(documentSnapshot.getData().get("endDate").toString());
+                                        }catch (NullPointerException e){
+                                        }
+                                        if(scrapContestList.size() == scrapArray.size()) {
+                                            convertDateType();
+                                            recycleView.setHasFixedSize(true);
+                                            layoutManager = new LinearLayoutManager(activity);
+                                            recycleView.setLayoutManager(layoutManager);
+                                            mAdapter = new ContestScrapAdapter(scrapContestList, getActivity());
+                                            recycleView.setAdapter(mAdapter);
+                                        }
+                                    }
+                                });
                             }
 
                         }else {
@@ -188,7 +182,6 @@ public class ContestScrapActivity extends Fragment {
                         }
                     }
                 });
-
     }
 
     public void mOnPopupClick(String value, String dateTitle){
@@ -296,10 +289,9 @@ public class ContestScrapActivity extends Fragment {
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.addSpan(new DotSpan(15,Color.RED));
+            view.addSpan(new DotSpan(15,Color.parseColor("#6B6FAE")));
         }
     }
 
 
 }
-

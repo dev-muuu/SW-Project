@@ -23,6 +23,27 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/newAlarmText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,26 +53,11 @@
             android:id="@+id/alarmSetButton"
             android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="30dp"
+            android:layout_gravity="center|right"
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp"
             app:backgroundTint="#6B6FAE" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/newAlarmText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="30dp"
-        android:textSize="17dp"
-        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alarmRecyclerView"
