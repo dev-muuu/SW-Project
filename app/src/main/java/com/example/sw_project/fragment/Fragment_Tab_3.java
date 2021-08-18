@@ -181,7 +181,10 @@ public class Fragment_Tab_3 extends Fragment {
                     docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            major = (HashMap<String, ArrayList>) documentSnapshot.getData().get("major");
+                            try {
+                                major = (HashMap<String, ArrayList>) documentSnapshot.getData().get("major");
+                            }catch (NullPointerException e){
+                            }
                             collegeStatisticQuery();
                         }
                     });

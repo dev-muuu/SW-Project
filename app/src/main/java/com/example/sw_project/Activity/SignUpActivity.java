@@ -201,18 +201,22 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void isSSWUEmail(){
         String email = ((EditText)findViewById(R.id.emailEditText)).getText().toString();
-        StringTokenizer stk = new StringTokenizer(email,"@");
-        stk.nextToken();
-        if(stk.nextToken().equals("sungshin.ac.kr"))
-            emailCertification(email);
-        else{
-            builder = new AlertDialog.Builder(SignUpActivity.this);
+        if(email.equals(""))
+            startToast("학교 이메일을 입력해주세요");
+        else {
+            StringTokenizer stk = new StringTokenizer(email, "@");
+            stk.nextToken();
+            if (stk.nextToken().equals("sungshin.ac.kr"))
+                emailCertification(email);
+            else {
+                builder = new AlertDialog.Builder(SignUpActivity.this);
 
-            dialog = builder.setMessage("학교 계정 이메일로 작성해주세요.\n\n" +
-                    "@sungshin.ac.kr")
-                    .setNegativeButton("확인", null)
-                    .create();
-            dialog.show();
+                dialog = builder.setMessage("학교 계정 이메일로 작성해주세요.\n\n" +
+                        "@sungshin.ac.kr")
+                        .setNegativeButton("확인", null)
+                        .create();
+                dialog.show();
+            }
         }
 
     }

@@ -51,7 +51,6 @@ public class AlarmSettingAdapter extends RecyclerView.Adapter<AlarmSettingAdapte
         AlarmInfo alarmTextDeco = mDataset.get(position);
 
         CheckBox checkBox = viewHolder.cardView.findViewById(R.id.alarmCheckBox);
-
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

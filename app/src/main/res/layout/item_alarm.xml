@@ -50,7 +50,8 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
-                android:gravity="left" />
+                android:gravity="left"
+                android:maxLines="1" />
 
             <TextView
                 android:id="@+id/alarmMessageText"
@@ -64,7 +65,8 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
-                android:gravity="left" />
+                android:gravity="left"
+                android:maxLines="1" />
 
             <TextView
                 android:id="@+id/alarmTimeText"
@@ -78,7 +80,8 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
-                android:gravity="left" />
+                android:gravity="left"
+                android:maxLines="1" />
 
         </LinearLayout>
 

@@ -215,7 +215,6 @@ public class PostCommentFragment extends Fragment {
     private void postingAlarm(final CommentInfo commentInfo){
 
         AlarmInfo alarmInfo = new AlarmInfo();
-
         alarmInfo.setDestinationUid(writeinfo.getUserUid());
         alarmInfo.setUid(user.getUid());
         alarmInfo.setUserNickname(commentInfo.getCommentwriter());
